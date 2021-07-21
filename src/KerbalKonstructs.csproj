@@ -289,22 +289,12 @@ IF $(ConfigurationName) == Release (
 )</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>rmdir /q /s  $(ProjectDir)\obj
-
-IF $(ConfigurationName) == Release (
-"C:\Program Files\Git\git-bash.exe" $(SolutionDir)\create_zip.sh 
-)
-
-IF $(ConfigurationName) == Release12 (
-"C:\Program Files\Git\git-bash.exe" $(SolutionDir)\create_zip.sh KSP122
-)
-
-IF $(ConfigurationName) == Release13 (
-"C:\Program Files\Git\git-bash.exe" $(SolutionDir)\create_zip.sh KSP131 
-)</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>echo %25time%25</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
