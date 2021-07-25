@@ -1,7 +1,7 @@
 {
     	"NAME":"KerbalKonstructs",
-	"URL":"https://raw.githubusercontent.com/ryanc55/Kerbal-Konstructs/master/GameData/KerbalKonstructs/KerbalKonstructs.version",
-	"DOWNLOAD":"https://github.com/ryanc55/Kerbal-Konstructs/releases",
+	"URL":"https://github.com/KSP-RO/Kerbal-Konstructs/blob/master/GameData/KerbalKonstructs/KerbalKonstructs.version",
+	"DOWNLOAD":"https://github.com/KSP-RO/Kerbal-Konstructs/releases",
 	"VERSION":
 	{
 		"MAJOR":1,
