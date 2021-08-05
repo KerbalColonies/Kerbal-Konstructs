@@ -57,6 +57,9 @@ Redistribution and use in source and binary forms, without modification, are per
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Addendum 1: You may modify the contents for personal use but may not re-distribute modified versions of the content without obtaining permission first. Contact Ashley Hall on the KSP forums, PMing the user AlphaAsh.
+
 Addendum 2: This work may not be re-distributed, modified or un-modified in a 'mod pack'.
+
 Addendum 3: If re-distributing, no financial or other form of profitable gain should be made from this work, directly or indirectly. No advertising of any sort may be included in the redistribution or at any point of redistribution.
+
 Addendum 4: Contributions from collaborators may be licenced separately, except where such licence conflicts with this licence. Conflicts will be handled by the collaborators when they occur.
