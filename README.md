@@ -12,7 +12,7 @@ FAQ
 ---
 What about AlphaAsh?
 
-AlphaAsh resigned from KSP modding. He gave me the permission to continue the development of KerbalKontructs and the modifucation ditribution of his Art Assets.  
+AlphaAsh has given us (the KSP-RO team) permission to continue development on Kerbal Konstructs and to redistribute the Kerbal Konstructs assets.
 
 Old FAQ by AlphaAsh
 ---
@@ -35,7 +35,7 @@ License
 -------
 The MIT License (MIT)
 
-Copyright (c) 2015-2018 Matt *"medsouz"* Souza, Ash *"AlphaAsh"* Hall, Christian *"GER-Space"* Bronk, *"Li0n"* and *"Whale_2"*
+Copyright (c) 2015-2018 Matt *"medsouz"* Souza, Ash *"AlphaAsh"* Hall, Christian *"GER-Space"* Bronk, *"Li0n"*, *"Whale_2"*, and the KSP-RO team.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
