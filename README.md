@@ -8,6 +8,12 @@ The mod includes a set of assets, which can be used with the provided ingame edi
 
 Kerbal Konstructs is a reimplementation of the popular KerbTown mod by Razchek. medsouz's original goal was to remain completely compatible with KerbTown asset packs while also providing optimizations that are not present in the original mod. The goal of this fork is to provide new features as well as optimisations without concern for KerbTown compatibility. This fork abandons KerbTown but I acknowledge and credit the contributions.
 
+
+Dependencies
+---
+[Custom Prelaunch Checks](https://github.com/KSP-RO/CustomPreLaunchChecks/)
+
+
 FAQ
 ---
 What about AlphaAsh?
