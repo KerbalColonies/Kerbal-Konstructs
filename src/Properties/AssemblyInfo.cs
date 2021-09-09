@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("KerbalKonstructs")]
-[assembly: AssemblyCopyright("Copyright © Matt \"medsouz\" Souza, Ashley \"AlphaAsh\" Hall, Christian \"GER-Space\" Bronk 2019")]
+[assembly: AssemblyCopyright("Copyright © Matt \"medsouz\" Souza, Ashley \"AlphaAsh\" Hall, Christian \"GER-Space\" Bronk, KSP-RO team 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
