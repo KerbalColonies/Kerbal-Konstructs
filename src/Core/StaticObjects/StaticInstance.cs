@@ -239,6 +239,16 @@ namespace KerbalKonstructs.Core
             }
         }
 
+        private string PrintChildren(GameObject o, string prefix)
+        {
+            string retstr = prefix + ">" + o.name;
+            for (int i = 0; i < o.transform.childCount; ++i)
+            {
+                retstr += "\n" + PrintChildren(o.transform.GetChild(i).gameObject, prefix + "--");
+            }
+            return retstr;
+        }
+
 
         private void Spawn()
         {
@@ -257,6 +267,9 @@ namespace KerbalKonstructs.Core
 
             if (model.isSquad)
             {
+                //Debug.Log("@@@ Spawning Squad static " + model.name);
+                //Debug.Log("Tree: \n" + PrintChildren(mesh, ""));
+                
                 InstanceUtil.MangleSquadStatic(this);
             }
             InstanceUtil.SetLayerRecursively(this, 15);
