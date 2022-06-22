@@ -95,8 +95,8 @@ namespace KerbalKonstructs.Core
                 _mesh = value;
                 _mesh.name = "Mesh";
                 _mesh.transform.parent = gameObject.transform;
-                _mesh.transform.position = transform.position;
-                _mesh.transform.rotation = transform.rotation;
+                _mesh.transform.localPosition = Vector3.zero;
+                _mesh.transform.localRotation = Quaternion.identity;
             }
         }
         internal GameObject wreck;
