@@ -43,8 +43,6 @@ namespace KerbalKonstructs.Modules
 
         private bool cscIsOpen = false;
 
-        Vector3 launchSitePosition;
-        Vector3 lsPosition;
         Rect screenRect;
 
         public override void Draw()
@@ -150,8 +148,9 @@ namespace KerbalKonstructs.Modules
                     continue;
                 }
 
-
-                Vector3 pos = MapView.MapCamera.GetComponent<Camera>().WorldToScreenPoint(ScaledSpace.LocalToScaledSpace(groundStation.position));
+				Vector3d worldPos = groundStation.CelestialBody.GetWorldSurfacePosition(groundStation.RefLatitude, groundStation.RefLongitude, groundStation.RadiusOffset);
+				Vector3d scaledSpacePos = ScaledSpace.LocalToScaledSpace(worldPos);
+				Vector3 pos = MapView.MapCamera.GetComponent<Camera>().WorldToScreenPoint(scaledSpacePos);
 
                 Rect screenRect6 = new Rect((pos.x - 8), (Screen.height - pos.y) - 8, 16, 16);
                 // Distance between camera and spawnpoint sort of
@@ -223,14 +222,14 @@ namespace KerbalKonstructs.Modules
                 }
 
                 //   launchSitePosition = (Vector3)launchSite.lsGameObject.transform.position - MapView.MapCamera.GetComponent<Camera>().transform.position;
-                launchSitePosition = (Vector3)launchSite.body.GetWorldSurfacePosition(launchSite.refLat, launchSite.refLon, launchSite.refAlt) - MapView.MapCamera.GetComponent<Camera>().transform.position;
+                Vector3d launchSitePosition = launchSite.body.GetWorldSurfacePosition(launchSite.staticInstance.RefLatitude, launchSite.staticInstance.RefLongitude, launchSite.staticInstance.RadiusOffset);
 
                 if (mapHideIconsBehindBody && IsOccluded(launchSitePosition, body))
                 {
                     continue;
                 }
 
-                lsPosition = MapView.MapCamera.GetComponent<Camera>().WorldToScreenPoint(ScaledSpace.LocalToScaledSpace(launchSitePosition));
+                Vector3 lsPosition = MapView.MapCamera.GetComponent<Camera>().WorldToScreenPoint(ScaledSpace.LocalToScaledSpace(launchSitePosition));
                 screenRect = new Rect((lsPosition.x - 8), (Screen.height - lsPosition.y) - 8, 16, 16);
 
                 // Distance between camera and spawnpoint sort of
@@ -325,7 +324,8 @@ namespace KerbalKonstructs.Modules
                 }
 
 
-                Vector3 pos = MapView.MapCamera.GetComponent<Camera>().WorldToScreenPoint(ScaledSpace.LocalToScaledSpace(customSpaceCenter.gameObject.transform.position));
+				Vector3d worldPos = body.GetWorldSurfacePosition(customSpaceCenter.staticInstance.RefLatitude, customSpaceCenter.staticInstance.RefLongitude, customSpaceCenter.staticInstance.RadiusOffset);
+				Vector3 pos = MapView.MapCamera.GetComponent<Camera>().WorldToScreenPoint(ScaledSpace.LocalToScaledSpace(worldPos));
 
                 Rect screenRect6 = new Rect((pos.x - 8), (Screen.height - pos.y) - 8, 16, 16);
                 // Distance between camera and spawnpoint sort of
