@@ -284,10 +284,10 @@ namespace KerbalKonstructs.Modules
 
             if (KerbalKonstructs.instance.enableRT)
             {
-                if (openRTStations.ContainsKey(instance))
+                if(openRTStations.TryGetValue(instance, out var station))
                 {
                     openRTStations.Remove(instance);
-                    RemoteTechAddon.RemoveGroundStation(openRTStations[instance]);
+                    RemoteTechAddon.RemoveGroundStation(station);
                 }
                 else
                 {
