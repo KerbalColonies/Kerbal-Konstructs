@@ -96,27 +96,10 @@ namespace KerbalKonstructs.Core
 
     public class KKCustomParameters1 : GameParameters.CustomParameterNode
     {
-        private static KKCustomParameters1 _instance;
-
         public enum NewInstancePath
         {
             INTERNAL,
             EXTERNAL,
-        }
-
-        public static KKCustomParameters1 instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    if (HighLogic.CurrentGame != null)
-                    {
-                        _instance = HighLogic.CurrentGame.Parameters.CustomParams<KKCustomParameters1>();
-                    }
-                }
-                return _instance;
-            }
         }
 
         public override string Title { get { return "Settings"; } }
