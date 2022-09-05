@@ -52,7 +52,7 @@ namespace KerbalKonstructs
             {
                 if (RemoteTechAddon.isInstalled)
                 {
-                    return HighLogic.CurrentGame.Parameters.CustomParams<KKCustomParameters0>().enableRT;
+                    return HighLogic.CurrentGame?.Parameters?.CustomParams<KKCustomParameters0>()?.enableRT == true;
                 }
                 else
                 {
