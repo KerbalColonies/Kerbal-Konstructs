@@ -365,11 +365,11 @@ namespace KerbalKonstructs
                     foundTexture = new Texture2D(tmpTexture.width, tmpTexture.height, TextureFormat.ARGB32, createMibMaps);
                     if (fileExtension == ".dds")
                     {
-                        foundTexture = LoadTextureDXT(File.ReadAllBytes("GameData/" + textureName + GetImageExtention(textureName)), createMibMaps);
+                        foundTexture = LoadTextureDXT(File.ReadAllBytes(KSPUtil.ApplicationRootPath + "GameData/" + textureName + GetImageExtention(textureName)), createMibMaps);
                     }
                     else
                     {
-                        foundTexture.LoadImage﻿(File.ReadAllBytes("GameData/" + textureName + GetImageExtention(textureName)), false);
+                        foundTexture.LoadImage﻿(File.ReadAllBytes(KSPUtil.ApplicationRootPath + "GameData/" + textureName + GetImageExtention(textureName)), false);
                     }
                     foundTexture.Apply(createMibMaps, false);
                 }
