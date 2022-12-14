@@ -45,7 +45,7 @@ jobs:
         uses: KSP-RO/BuildTools/update-version-file@master
         with:
           tag: ${{ github.event.release.tag_name }}
-          path: ${GITHUB_WORKSPACE}/GameData/KerbalKonstructs/kerbalKonstructs.version
+          path: ${GITHUB_WORKSPACE}/GameData/KerbalKonstructs/KerbalKonstructs.version
 
       # KK does not have a version reference in readme
       # - name: Update Readme

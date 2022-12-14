@@ -48,7 +48,7 @@ jobs:
       - name: Build metadata
         uses: KSP-RO/BuildTools/update-version-file@master
         with:
-          path: ${GITHUB_WORKSPACE}/GameData/KerbalKonstructs/kerbalKonstructs.version
+          path: ${GITHUB_WORKSPACE}/GameData/KerbalKonstructs/KerbalKonstructs.version
           tag: "v2.0.0.0"
 
       - name: Assemble release
