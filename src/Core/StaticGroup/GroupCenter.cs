@@ -81,11 +81,15 @@ namespace KerbalKonstructs.Core
         internal void Spawn()
         {
 
-            if (StaticDatabase.HasGroupCenter(dbKey))
+            var key = dbKey;
+            if (string.IsNullOrEmpty(key))
+                return;
+            
+            if (StaticDatabase.HasGroupCenter(key))
             {
                 string oldName = Group;
                 int index = 0;
-                while (StaticDatabase.HasGroupCenter(dbKey))
+                while (StaticDatabase.HasGroupCenter(key))
                 {
                     Group = oldName + "_" + index.ToString();
                     index++;
@@ -472,6 +476,9 @@ namespace KerbalKonstructs.Core
         {
             get
             {
+                var cb = CelestialBody;
+                if (cb == null)
+                    return string.Empty;
                 return (CelestialBody.name + "_" + Group);
             }
         }
