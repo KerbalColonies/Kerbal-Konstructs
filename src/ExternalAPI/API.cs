@@ -109,6 +109,7 @@ namespace KerbalKonstructs
                 instance.isScanable = isScanable;
 
                 instance.Orientate();
+                instance.Activate();
 
                 return instance.UUID;
             }
