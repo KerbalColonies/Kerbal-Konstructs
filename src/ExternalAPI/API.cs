@@ -1,5 +1,6 @@
 ﻿using KerbalKonstructs.Core;
 using KerbalKonstructs.Modules;
+using KerbalKonstructs.UI;
 using System;
 using UnityEngine;
 
@@ -81,7 +82,7 @@ namespace KerbalKonstructs
             }
         }
 
-        public static string PlaceStatic(string modelName, string bodyName, double lat, double lng, float alt, float rotation, bool isScanable = false)
+        public static string PlaceStatic(string modelName, string bodyName, double lat, double lng, float alt, float rotation, bool isScanable = false, string groupname = "SaveGame")
         {
             StaticModel model = StaticDatabase.GetModelByName(modelName);
             if (model != null)
@@ -94,7 +95,14 @@ namespace KerbalKonstructs
                 //instance.mesh = UnityEngine.Object.Instantiate(model.prefab);
                 instance.RadiusOffset = alt;
                 instance.CelestialBody = ConfigUtil.GetCelestialBody(bodyName);
-                instance.Group = "SaveGame";
+                if (StaticDatabase.HasGroupCenter(groupname))
+                {
+                    instance.Group = groupname;
+                }
+                else
+                {
+                    instance.Group = "SaveGame";
+                }
                 instance.RadialPosition = KKMath.GetRadiadFromLatLng(instance.CelestialBody, lat, lng);
                 instance.RotationAngle = rotation;
                 instance.Orientation = Vector3.up;
@@ -118,7 +126,79 @@ namespace KerbalKonstructs
             return null;
         }
 
+        #region groups
 
+        public static bool CreateGroup(string groupName)
+        {
+            if (!StaticDatabase.HasGroupCenter(groupName))
+            {
+                GroupCenter groupCenter = new GroupCenter
+                {
+                    RadialPosition = FlightGlobals.currentMainBody.transform.InverseTransformPoint(FlightGlobals.ActiveVessel.transform.position),
+                    Group = groupName,
+                    CelestialBody = FlightGlobals.currentMainBody
+                };
+                groupCenter.Spawn();
+                KSPLog.print(groupCenter.Group);
+                return true;
+            }
+            return false;
+        }
+
+        public static bool RemoveGroup(string groupName, string BodyName = null)
+        {
+            if (BodyName == null) { BodyName = StaticDatabase.lastActiveBody.name; }
+            groupName = BodyName + "_" + groupName;
+            if (StaticDatabase.HasGroupCenter(groupName))
+            {
+                StaticsEditorGUI.SetActiveGroup(StaticDatabase.GetGroupCenter(groupName));
+                GroupEditor.selectedGroup = StaticDatabase.GetGroupCenter(groupName);
+                GroupEditor.instance.DeleteGroupCenter();
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Copies all statics from a group to another group
+        /// </summary>
+        public static bool CopyGroup(string toGroupName, string fromGroupName, string BodyName = null)
+        {
+            if (BodyName == null) { BodyName = StaticDatabase.lastActiveBody.name; }
+            toGroupName = BodyName + "_" + toGroupName;
+            fromGroupName = BodyName + "_" + fromGroupName;
+            if (StaticDatabase.HasGroupCenter(toGroupName) && StaticDatabase.HasGroupCenter(fromGroupName))
+            {
+                StaticsEditorGUI.SetActiveGroup(StaticDatabase.GetGroupCenter(toGroupName));
+                StaticsEditorGUI.GetActiveGroup().CopyGroup(StaticDatabase.GetGroupCenter(fromGroupName));
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Unfinished, currently it does nothing
+        /// </summary>
+        /// <param name="groupname"></param>
+        /// <param name="body"></param>
+        /// <param name="radialPosition"></param>
+        /// <param name="orientation"></param>
+        /// <param name="seaLevelAsReference"></param>
+        public static void MoveGroup(string groupname, CelestialBody body, Vector3 radialPosition, Vector3 orientation, bool seaLevelAsReference = false) { }
+
+        public static bool AddStaticToGroup(string uuid, string groupName, string BodyName = null)
+        {
+            if (BodyName == null) { BodyName = StaticDatabase.lastActiveBody.name; }
+            if (StaticDatabase.instancedByUUID.ContainsKey(uuid) && StaticDatabase.HasGroupCenter(BodyName + "_" + groupName))
+            {
+                StaticInstance instance = StaticDatabase.instancedByUUID[uuid];
+                instance.Group = groupName;
+                return true;
+            }
+            return false;
+        }
+
+        #endregion
 
         public static bool AddEnterTriggerCallback(string uuid, Action<Part> myFunction)
         {
@@ -190,6 +270,11 @@ namespace KerbalKonstructs
                 Log.UserWarning("API:AddExitTriggerCallback: Can´t find a static with the UUID: " + uuid);
                 return false;
             }
+        }
+
+        public static void Save()
+        {
+            KerbalKonstructs.instance.SaveObjects();
         }
 
         public static void RegisterOnBuildingSpawned(Action<GameObject> action)
