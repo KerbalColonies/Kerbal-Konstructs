@@ -142,59 +142,65 @@ namespace KerbalKonstructs
                 KSPLog.print(groupCenter.Group);
                 return true;
             }
+            Log.UserWarning($"API:CreateGroup: group with name {groupName} already exists.");
             return false;
         }
 
-        public static bool RemoveGroup(string groupName, string BodyName = null)
+        public static bool RemoveGroup(string groupName, string bodyName = null)
         {
-            if (BodyName == null) { BodyName = StaticDatabase.lastActiveBody.name; }
-            groupName = BodyName + "_" + groupName;
-            if (StaticDatabase.HasGroupCenter(groupName))
+            if (bodyName == null)
             {
-                StaticsEditorGUI.SetActiveGroup(StaticDatabase.GetGroupCenter(groupName));
-                GroupEditor.selectedGroup = StaticDatabase.GetGroupCenter(groupName);
+                bodyName = StaticDatabase.lastActiveBody.name; 
+            }
+
+            string groupNameB = $"{bodyName}_{groupName}";
+            if (StaticDatabase.HasGroupCenter(groupNameB))
+            {
+                StaticsEditorGUI.SetActiveGroup(StaticDatabase.GetGroupCenter(groupNameB));
+                GroupEditor.selectedGroup = StaticDatabase.GetGroupCenter(groupNameB);
                 GroupEditor.instance.DeleteGroupCenter();
                 return true;
             }
+            Log.UserWarning($"API:RemoveGroup: group with name {groupName} does not exists.");
             return false;
         }
 
         /// <summary>
         /// Copies all statics from a group to another group
         /// </summary>
-        public static bool CopyGroup(string toGroupName, string fromGroupName, string BodyName = null)
+        public static bool CopyGroup(string toGroupName, string fromGroupName, string bodyName = null)
         {
-            if (BodyName == null) { BodyName = StaticDatabase.lastActiveBody.name; }
-            toGroupName = BodyName + "_" + toGroupName;
-            fromGroupName = BodyName + "_" + fromGroupName;
+            if (bodyName == null) { bodyName = StaticDatabase.lastActiveBody.name; }
+            string toGroupNameB = $"{bodyName}_{toGroupName}";
+            string fromGroupNameB = $"{bodyName}_{fromGroupName}";
             if (StaticDatabase.HasGroupCenter(toGroupName) && StaticDatabase.HasGroupCenter(fromGroupName))
             {
                 StaticsEditorGUI.SetActiveGroup(StaticDatabase.GetGroupCenter(toGroupName));
                 StaticsEditorGUI.GetActiveGroup().CopyGroup(StaticDatabase.GetGroupCenter(fromGroupName));
                 return true;
             }
+            Log.UserWarning($"API:CopyGroup: at least one of the groups does not exists.");
             return false;
         }
 
         /// <summary>
         /// Unfinished, currently it does nothing
         /// </summary>
-        /// <param name="groupname"></param>
-        /// <param name="body"></param>
-        /// <param name="radialPosition"></param>
-        /// <param name="orientation"></param>
-        /// <param name="seaLevelAsReference"></param>
         public static void MoveGroup(string groupname, CelestialBody body, Vector3 radialPosition, Vector3 orientation, bool seaLevelAsReference = false) { }
 
-        public static bool AddStaticToGroup(string uuid, string groupName, string BodyName = null)
+        public static bool AddStaticToGroup(string uuid, string groupName, string bodyName = null)
         {
-            if (BodyName == null) { BodyName = StaticDatabase.lastActiveBody.name; }
-            if (StaticDatabase.instancedByUUID.ContainsKey(uuid) && StaticDatabase.HasGroupCenter(BodyName + "_" + groupName))
+            if (bodyName == null)
+            {
+                bodyName = StaticDatabase.lastActiveBody.name;
+            }
+            if (StaticDatabase.instancedByUUID.ContainsKey(uuid) && StaticDatabase.HasGroupCenter($"{bodyName}_{groupName}"))
             {
                 StaticInstance instance = StaticDatabase.instancedByUUID[uuid];
                 instance.Group = groupName;
                 return true;
             }
+            Log.UserWarning($"API:AddStaticToGroup: the uuid and/or the groupname weren't found.");
             return false;
         }
 
