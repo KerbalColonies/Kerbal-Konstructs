@@ -9,8 +9,8 @@ namespace KerbalKonstructs
     public static class API
     {
 
-        public static Action<GameObject> OnBuildingSpawned = delegate { };
-
+        internal static Action<GameObject> OnBuildingSpawned = delegate { };
+        internal static Action<GroupCenter> OnGroupSaved = delegate { };
 
         public static string SpawnObject(string modelName)
         {
@@ -127,14 +127,35 @@ namespace KerbalKonstructs
         }
 
         #region groups
+        
+        public static bool OpenGroupEditor(string groupName, string bodyName = null)
+        {
+            if (bodyName == null)
+            {
+                bodyName = StaticDatabase.lastActiveBody.name;
+            }
 
-        public static bool CreateGroup(string groupName)
+            string groupNameB = $"{bodyName}_{groupName}";
+            if (StaticDatabase.HasGroupCenter(groupNameB))
+            {
+                EditorGUI.CloseEditors();
+                MapDecalEditor.Instance.Close();
+                GroupEditor.instance.Close();
+                GroupEditor.selectedGroup = StaticDatabase.GetGroupCenter(groupNameB);
+                GroupEditor.instance.Open();
+                return true;
+            }
+            return false;
+
+        }
+
+        public static bool CreateGroup(string groupName, Vector3 RadialPosition = default(Vector3))
         {
             if (!StaticDatabase.HasGroupCenter(groupName))
             {
                 GroupCenter groupCenter = new GroupCenter
                 {
-                    RadialPosition = FlightGlobals.currentMainBody.transform.InverseTransformPoint(FlightGlobals.ActiveVessel.transform.position),
+                    RadialPosition = (RadialPosition == default(Vector3)) ? FlightGlobals.currentMainBody.transform.InverseTransformPoint(FlightGlobals.ActiveVessel.transform.position) : RadialPosition,
                     Group = groupName,
                     CelestialBody = FlightGlobals.currentMainBody
                 };
@@ -173,10 +194,10 @@ namespace KerbalKonstructs
             if (bodyName == null) { bodyName = StaticDatabase.lastActiveBody.name; }
             string toGroupNameB = $"{bodyName}_{toGroupName}";
             string fromGroupNameB = $"{bodyName}_{fromGroupName}";
-            if (StaticDatabase.HasGroupCenter(toGroupName) && StaticDatabase.HasGroupCenter(fromGroupName))
+            if (StaticDatabase.HasGroupCenter(toGroupNameB) && StaticDatabase.HasGroupCenter(fromGroupNameB))
             {
-                StaticsEditorGUI.SetActiveGroup(StaticDatabase.GetGroupCenter(toGroupName));
-                StaticsEditorGUI.GetActiveGroup().CopyGroup(StaticDatabase.GetGroupCenter(fromGroupName));
+                StaticsEditorGUI.SetActiveGroup(StaticDatabase.GetGroupCenter(toGroupNameB));
+                StaticsEditorGUI.GetActiveGroup().CopyGroup(StaticDatabase.GetGroupCenter(fromGroupNameB));
                 return true;
             }
             Log.UserWarning($"API:CopyGroup: at least one of the groups does not exists.");
@@ -293,6 +314,13 @@ namespace KerbalKonstructs
             OnBuildingSpawned -= action;
         }
 
-
+        public static void RegisterOnGroupSaved(Action<GroupCenter> action)
+        {
+            OnGroupSaved += action;
+        }
+        public static void UnRegisterOnGroupSaved(Action<GroupCenter> action)
+        {
+            OnGroupSaved -= action;
+        }
     }
 }
