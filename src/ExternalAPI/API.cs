@@ -2,7 +2,6 @@
 using KerbalKonstructs.Modules;
 using KerbalKonstructs.UI;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace KerbalKonstructs
@@ -150,7 +149,7 @@ namespace KerbalKonstructs
 
         }
 
-        public static string CreateGroup(string groupName, Vector3 RadialPosition = default(Vector3))
+        public static bool CreateGroup(string groupName, Vector3 RadialPosition = default(Vector3))
         {
             if (!StaticDatabase.HasGroupCenter(groupName))
             {
@@ -162,10 +161,10 @@ namespace KerbalKonstructs
                 };
                 groupCenter.Spawn();
                 KSPLog.print(groupCenter.Group);
-                return groupCenter.Group;
+                return true;
             }
             Log.UserWarning($"API:CreateGroup: group with name {groupName} already exists.");
-            return "";
+            return false;
         }
 
         public static bool RemoveGroup(string groupName, string bodyName = null)
@@ -219,33 +218,11 @@ namespace KerbalKonstructs
             if (StaticDatabase.instancedByUUID.ContainsKey(uuid) && StaticDatabase.HasGroupCenter($"{bodyName}_{groupName}"))
             {
                 StaticInstance instance = StaticDatabase.instancedByUUID[uuid];
-                GroupCenter group = StaticDatabase.GetGroupCenter($"{bodyName}_{groupName}");
-
-                EditorGUI.selectedInstance = instance;
-                EditorGUI.instance.SetGroup(group);
-
+                instance.Group = groupName;
                 return true;
             }
             Log.UserWarning($"API:AddStaticToGroup: the uuid and/or the groupname weren't found.");
             return false;
-        }
-
-        public static List<StaticInstance> GetGroupStatics(string groupName, string bodyName = null)
-        {
-            if (bodyName == null)
-            {
-                bodyName = StaticDatabase.lastActiveBody.name;
-            }
-
-            string groupNameB = $"{bodyName}_{groupName}";
-            if (StaticDatabase.HasGroupCenter(groupNameB))
-            {
-                return StaticDatabase.GetGroupCenter(groupNameB).childInstances;
-            }
-            else
-            {
-                return new List<StaticInstance>();
-            }
         }
 
         #endregion
