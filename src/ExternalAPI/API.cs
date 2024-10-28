@@ -128,7 +128,7 @@ namespace KerbalKonstructs
         }
 
         #region groups
-        
+
         public static bool OpenGroupEditor(string groupName, string bodyName = null)
         {
             if (bodyName == null)
@@ -172,7 +172,7 @@ namespace KerbalKonstructs
         {
             if (bodyName == null)
             {
-                bodyName = StaticDatabase.lastActiveBody.name; 
+                bodyName = StaticDatabase.lastActiveBody.name;
             }
 
             string groupNameB = $"{bodyName}_{groupName}";
