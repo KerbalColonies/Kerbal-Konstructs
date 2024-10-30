@@ -83,7 +83,7 @@ namespace KerbalKonstructs
             }
         }
 
-        public static string PlaceStatic(string modelName, string bodyName, double lat, double lng, float alt, float rotation, bool isScanable = false, string groupname = "SaveGame", string variant = default)
+        public static string PlaceStatic(string modelName, string bodyName, double lat, double lng, float alt, float rotation, bool isScanable = false, string groupname = "SaveGame")
         {
             StaticModel model = StaticDatabase.GetModelByName(modelName);
             if (model != null)
@@ -104,7 +104,6 @@ namespace KerbalKonstructs
                 {
                     instance.Group = "SaveGame";
                 }
-
                 instance.RadialPosition = KKMath.GetRadiadFromLatLng(instance.CelestialBody, lat, lng);
                 instance.RotationAngle = rotation;
                 instance.Orientation = Vector3.up;
@@ -117,17 +116,6 @@ namespace KerbalKonstructs
                 instance.configUrl = null;
 
                 instance.isScanable = isScanable;
-
-                // annoying to understand it and get it working.
-                // After adding this my test instances were spawned too high
-                if (variant == default || !instance.model.hasVariants)
-                {
-                    instance.VariantName = string.Empty;
-                }
-                else
-                {
-                    instance.VariantName = variant;
-                }
 
                 instance.Orientate();
                 instance.Activate();
