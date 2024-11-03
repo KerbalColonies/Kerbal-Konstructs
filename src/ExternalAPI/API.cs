@@ -161,7 +161,6 @@ namespace KerbalKonstructs
             }
             return false;
 
-        }
 
         public static string CreateGroup(string groupName, Vector3 RadialPosition = default(Vector3))
         {
