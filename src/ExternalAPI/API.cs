@@ -1,6 +1,8 @@
 ﻿using KerbalKonstructs.Core;
 using KerbalKonstructs.Modules;
+using KerbalKonstructs.UI;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace KerbalKonstructs
@@ -8,8 +10,9 @@ namespace KerbalKonstructs
     public static class API
     {
 
-        public static Action<GameObject> OnBuildingSpawned = delegate { };
-
+        internal static Action<GameObject> OnBuildingSpawned = delegate { };
+        internal static Action<StaticInstance> OnBuildingClicked = delegate { };
+        internal static Action<GroupCenter> OnGroupSaved = delegate { };
 
         public static string SpawnObject(string modelName)
         {
@@ -81,7 +84,7 @@ namespace KerbalKonstructs
             }
         }
 
-        public static string PlaceStatic(string modelName, string bodyName, double lat, double lng, float alt, float rotation, bool isScanable = false)
+        public static string PlaceStatic(string modelName, string bodyName, double lat, double lng, float alt, float rotation, bool isScanable = false, string groupname = "SaveGame", string variant = default)
         {
             StaticModel model = StaticDatabase.GetModelByName(modelName);
             if (model != null)
@@ -94,7 +97,15 @@ namespace KerbalKonstructs
                 //instance.mesh = UnityEngine.Object.Instantiate(model.prefab);
                 instance.RadiusOffset = alt;
                 instance.CelestialBody = ConfigUtil.GetCelestialBody(bodyName);
-                instance.Group = "SaveGame";
+                if (StaticDatabase.HasGroupCenter(groupname))
+                {
+                    instance.Group = groupname;
+                }
+                else
+                {
+                    instance.Group = "SaveGame";
+                }
+
                 instance.RadialPosition = KKMath.GetRadiadFromLatLng(instance.CelestialBody, lat, lng);
                 instance.RotationAngle = rotation;
                 instance.Orientation = Vector3.up;
@@ -108,6 +119,17 @@ namespace KerbalKonstructs
 
                 instance.isScanable = isScanable;
 
+                // annoying to understand it and get it working.
+                // After adding this my test instances were spawned too high
+                if (variant == default || !instance.model.hasVariants)
+                {
+                    instance.VariantName = string.Empty;
+                }
+                else
+                {
+                    instance.VariantName = variant;
+                }
+
                 instance.Orientate();
                 instance.Activate();
 
@@ -118,7 +140,128 @@ namespace KerbalKonstructs
             return null;
         }
 
+        #region groups
 
+        public static bool OpenGroupEditor(string groupName, string bodyName = null)
+        {
+            if (bodyName == null)
+            {
+                bodyName = StaticDatabase.lastActiveBody.name;
+            }
+
+            string groupNameB = $"{bodyName}_{groupName}";
+            if (StaticDatabase.HasGroupCenter(groupNameB))
+            {
+                EditorGUI.CloseEditors();
+                MapDecalEditor.Instance.Close();
+                GroupEditor.instance.Close();
+                GroupEditor.selectedGroup = StaticDatabase.GetGroupCenter(groupNameB);
+                GroupEditor.instance.Open();
+                return true;
+            }
+            return false;
+
+        }
+
+        public static string CreateGroup(string groupName, Vector3 RadialPosition = default(Vector3))
+        {
+            if (!StaticDatabase.HasGroupCenter(groupName))
+            {
+                GroupCenter groupCenter = new GroupCenter
+                {
+                    RadialPosition = (RadialPosition == default(Vector3)) ? FlightGlobals.currentMainBody.transform.InverseTransformPoint(FlightGlobals.ActiveVessel.transform.position) : RadialPosition,
+                    Group = groupName,
+                    CelestialBody = FlightGlobals.currentMainBody
+                };
+                groupCenter.Spawn();
+                KSPLog.print(groupCenter.Group);
+                return groupCenter.Group;
+            }
+            Log.UserWarning($"API:CreateGroup: group with name {groupName} already exists.");
+            return "";
+        }
+
+        public static bool RemoveGroup(string groupName, string bodyName = null)
+        {
+            if (bodyName == null)
+            {
+                bodyName = StaticDatabase.lastActiveBody.name;
+            }
+
+            string groupNameB = $"{bodyName}_{groupName}";
+            if (StaticDatabase.HasGroupCenter(groupNameB))
+            {
+                StaticsEditorGUI.SetActiveGroup(StaticDatabase.GetGroupCenter(groupNameB));
+                GroupEditor.selectedGroup = StaticDatabase.GetGroupCenter(groupNameB);
+                GroupEditor.instance.DeleteGroupCenter();
+                return true;
+            }
+            Log.UserWarning($"API:RemoveGroup: group with name {groupName} does not exists.");
+            return false;
+        }
+
+        /// <summary>
+        /// Copies all statics from a group to another group
+        /// </summary>
+        public static bool CopyGroup(string toGroupName, string fromGroupName, string bodyName = null)
+        {
+            if (bodyName == null) { bodyName = StaticDatabase.lastActiveBody.name; }
+            string toGroupNameB = $"{bodyName}_{toGroupName}";
+            string fromGroupNameB = $"{bodyName}_{fromGroupName}";
+            if (StaticDatabase.HasGroupCenter(toGroupNameB) && StaticDatabase.HasGroupCenter(fromGroupNameB))
+            {
+                StaticsEditorGUI.SetActiveGroup(StaticDatabase.GetGroupCenter(toGroupNameB));
+                StaticsEditorGUI.GetActiveGroup().CopyGroup(StaticDatabase.GetGroupCenter(fromGroupNameB));
+                return true;
+            }
+            Log.UserWarning($"API:CopyGroup: at least one of the groups does not exists.");
+            return false;
+        }
+
+        /// <summary>
+        /// Unfinished, currently it does nothing
+        /// </summary>
+        public static void MoveGroup(string groupname, CelestialBody body, Vector3 radialPosition, Vector3 orientation, bool seaLevelAsReference = false) { }
+
+        public static bool AddStaticToGroup(string uuid, string groupName, string bodyName = null)
+        {
+            if (bodyName == null)
+            {
+                bodyName = StaticDatabase.lastActiveBody.name;
+            }
+            if (StaticDatabase.instancedByUUID.ContainsKey(uuid) && StaticDatabase.HasGroupCenter($"{bodyName}_{groupName}"))
+            {
+                StaticInstance instance = StaticDatabase.instancedByUUID[uuid];
+                GroupCenter group = StaticDatabase.GetGroupCenter($"{bodyName}_{groupName}");
+
+                EditorGUI.selectedInstance = instance;
+                EditorGUI.instance.SetGroup(group);
+
+                return true;
+            }
+            Log.UserWarning($"API:AddStaticToGroup: the uuid and/or the groupname weren't found.");
+            return false;
+        }
+
+        public static List<StaticInstance> GetGroupStatics(string groupName, string bodyName = null)
+        {
+            if (bodyName == null)
+            {
+                bodyName = StaticDatabase.lastActiveBody.name;
+            }
+
+            string groupNameB = $"{bodyName}_{groupName}";
+            if (StaticDatabase.HasGroupCenter(groupNameB))
+            {
+                return StaticDatabase.GetGroupCenter(groupNameB).childInstances;
+            }
+            else
+            {
+                return new List<StaticInstance>();
+            }
+        }
+
+        #endregion
 
         public static bool AddEnterTriggerCallback(string uuid, Action<Part> myFunction)
         {
@@ -192,6 +335,11 @@ namespace KerbalKonstructs
             }
         }
 
+        public static void Save()
+        {
+            KerbalKonstructs.instance.SaveObjects();
+        }
+
         public static void RegisterOnBuildingSpawned(Action<GameObject> action)
         {
             OnBuildingSpawned += action;
@@ -202,6 +350,23 @@ namespace KerbalKonstructs
             OnBuildingSpawned -= action;
         }
 
+        public static void RegisterOnBuildingClicked(Action<StaticInstance> action)
+        {
+            OnBuildingClicked += action;
+        }
 
+        public static void UnRegisterOnBuildingClicked(Action<StaticInstance> action)
+        {
+            OnBuildingClicked -= action;
+        }
+
+        public static void RegisterOnGroupSaved(Action<GroupCenter> action)
+        {
+            OnGroupSaved += action;
+        }
+        public static void UnRegisterOnGroupSaved(Action<GroupCenter> action)
+        {
+            OnGroupSaved -= action;
+        }
     }
 }
