@@ -560,6 +560,16 @@ namespace KerbalKonstructs.Core
 
             TrySpawn();
 
+            foreach (Collider colloder in gameObject.GetComponentsInChildren<Collider>(true).Where(col => col.isTrigger == false))
+            {
+                if (colloder.gameObject.GetComponent<KKMouseUtility>() == null)
+                {
+                    KKMouseUtility selector = colloder.gameObject.AddComponent<KKMouseUtility>();
+                    selector.staticInstance = this;
+                    selector.enabled = true;
+                }
+            }
+
             isActive = true;
             gameObject.SetActive(true);
 
