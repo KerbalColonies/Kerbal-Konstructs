@@ -423,6 +423,7 @@ namespace KerbalKonstructs.Core
                 instance.RelativePosition = sourceInstance.RelativePosition;
                 instance.Orientation = sourceInstance.Orientation;
                 instance.CelestialBody = CelestialBody;
+                instance.ModelScale = sourceInstance.ModelScale;
 
                 instance.Group = Group;
                 instance.groupCenter = this;
