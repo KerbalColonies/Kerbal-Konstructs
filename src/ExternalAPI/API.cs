@@ -28,6 +28,29 @@ namespace KerbalKonstructs
             }
         }
 
+        /// <summary>
+        /// Disables a static object until it's reloaded
+        /// <para>This DOES NOT work during load, disable statics in the update/fixedupdate</para>
+        /// <para>THe statics are disabled until the game is restarted</para>
+        /// </summary>
+        public static bool DeactivateStatic(string uuid)
+        {
+            if (StaticDatabase.instancedByUUID.ContainsKey(uuid))
+            {
+                StaticDatabase.instancedByUUID[uuid].Despawn();
+                StaticDatabase.instancedByUUID[uuid].Deactivate();
+                StaticDatabase.instancedByUUID[uuid].isActive = true;
+                StaticDatabase.instancedByUUID[uuid].isSpawned = true;
+                StaticDatabase.instancedByUUID[uuid].gameObject.SetActive(false);
+                return true;
+            }
+            else
+            {
+                Log.UserWarning("API:DeactivateStatic: Can´t find a static with the UUID: " + uuid);
+                return false;
+            }
+        }
+
         public static void RemoveStatic(string uuid)
         {
             if (StaticDatabase.instancedByUUID.ContainsKey(uuid))
@@ -140,6 +163,15 @@ namespace KerbalKonstructs
             return null;
         }
 
+        public static StaticInstance getStaticInstanceByUUID(string uuid)
+        {
+            if (StaticDatabase.instancedByUUID.ContainsKey(uuid))
+            {
+                return StaticDatabase.instancedByUUID[uuid];
+            }
+            return null;
+        }
+
         #region groups
 
         public static bool OpenGroupEditor(string groupName, string bodyName = null)
@@ -162,7 +194,7 @@ namespace KerbalKonstructs
             return false;
         }
 
-        public static string CreateGroup(string groupName, Vector3 RadialPosition = default(Vector3))
+        public static string CreateGroup(string groupName, Vector3 RadialPosition = default(Vector3), float heading = 0f)
         {
             if (!StaticDatabase.HasGroupCenter(groupName))
             {
@@ -170,7 +202,8 @@ namespace KerbalKonstructs
                 {
                     RadialPosition = (RadialPosition == default(Vector3)) ? FlightGlobals.currentMainBody.transform.InverseTransformPoint(FlightGlobals.ActiveVessel.transform.position) : RadialPosition,
                     Group = groupName,
-                    CelestialBody = FlightGlobals.currentMainBody
+                    CelestialBody = FlightGlobals.currentMainBody,
+                    Heading = heading
                 };
                 groupCenter.Spawn();
                 KSPLog.print(groupCenter.Group);
@@ -202,11 +235,12 @@ namespace KerbalKonstructs
         /// <summary>
         /// Copies all statics from a group to another group
         /// </summary>
-        public static bool CopyGroup(string toGroupName, string fromGroupName, string bodyName = null)
+        public static bool CopyGroup(string toGroupName, string fromGroupName, string toBodyName = null, string fromBodyName = null)
         {
-            if (bodyName == null) { bodyName = StaticDatabase.lastActiveBody.name; }
-            string toGroupNameB = $"{bodyName}_{toGroupName}";
-            string fromGroupNameB = $"{bodyName}_{fromGroupName}";
+            if (toBodyName == null) { toBodyName = StaticDatabase.lastActiveBody.name; }
+            if (fromBodyName == null) { fromBodyName = StaticDatabase.lastActiveBody.name; }
+            string toGroupNameB = $"{toBodyName}_{toGroupName}";
+            string fromGroupNameB = $"{fromBodyName}_{fromGroupName}";
             if (StaticDatabase.HasGroupCenter(toGroupNameB) && StaticDatabase.HasGroupCenter(fromGroupNameB))
             {
                 StaticsEditorGUI.SetActiveGroup(StaticDatabase.GetGroupCenter(toGroupNameB));

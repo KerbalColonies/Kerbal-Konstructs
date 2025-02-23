@@ -64,7 +64,7 @@ namespace KerbalKonstructs.Core
         [CFGSetting]
         public string VariantName;
 
-        internal GameObject gameObject;
+        public GameObject gameObject;
         private GameObject _mesh = null;
 
         internal GameObject mesh
@@ -108,7 +108,7 @@ namespace KerbalKonstructs.Core
 
 
         internal Transform transform => gameObject.transform;
-        internal Vector3 position => gameObject.transform.position;
+        public Vector3 position => gameObject.transform.position;
 
         internal StaticModel model;
 
@@ -211,7 +211,7 @@ namespace KerbalKonstructs.Core
             }
         }
 
-        internal void ToggleAllColliders(bool enable)
+        public void ToggleAllColliders(bool enable)
         {
             Transform[] gameObjectList = gameObject.GetComponentsInChildren<Transform>();
 
@@ -516,7 +516,7 @@ namespace KerbalKonstructs.Core
             this.HighlightObject(Color.black);
         }
 
-        internal void SaveConfig()
+        public void SaveConfig()
         {
             ConfigParser.SaveInstanceByCfg(configPath);
         }
