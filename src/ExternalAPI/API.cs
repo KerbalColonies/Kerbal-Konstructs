@@ -29,24 +29,48 @@ namespace KerbalKonstructs
         }
 
         /// <summary>
-        /// Disables a static object until it's reloaded
-        /// <para>This DOES NOT work during load, disable statics in the update/fixedupdate</para>
-        /// <para>THe statics are disabled until the game is restarted</para>
+        /// Sets the scale of a static object to 0, making it invisible and effectively deactivating it.
         /// </summary>
         public static bool DeactivateStatic(string uuid)
         {
             if (StaticDatabase.instancedByUUID.ContainsKey(uuid))
             {
-                StaticDatabase.instancedByUUID[uuid].Despawn();
-                StaticDatabase.instancedByUUID[uuid].Deactivate();
-                StaticDatabase.instancedByUUID[uuid].isActive = true;
-                StaticDatabase.instancedByUUID[uuid].isSpawned = true;
-                StaticDatabase.instancedByUUID[uuid].gameObject.SetActive(false);
+                StaticDatabase.instancedByUUID[uuid].ModelScaleSave = StaticDatabase.instancedByUUID[uuid].ModelScale;
+                StaticDatabase.instancedByUUID[uuid].ModelScale = 0;
+                StaticDatabase.instancedByUUID[uuid].Update();
                 return true;
             }
             else
             {
                 Log.UserWarning("API:DeactivateStatic: Can´t find a static with the UUID: " + uuid);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Resets the scale of a static object to the value it had before it was deactivated, or setting it to 1 if no previous value was saved.
+        /// </summary>
+        public static bool ActivateStatic(string uuid)
+        {
+            if (StaticDatabase.instancedByUUID.ContainsKey(uuid))
+            {
+                if (StaticDatabase.instancedByUUID[uuid].ModelScaleSave != -1)
+                {
+                    StaticDatabase.instancedByUUID[uuid].ModelScale = StaticDatabase.instancedByUUID[uuid].ModelScaleSave;
+                }
+
+                if (StaticDatabase.instancedByUUID[uuid].ModelScale == 0)
+                {
+                    StaticDatabase.instancedByUUID[uuid].ModelScale = 1;
+                }
+                StaticDatabase.instancedByUUID[uuid].ModelScaleSave = -1;
+
+                StaticDatabase.instancedByUUID[uuid].Update();
+                return true;
+            }
+            else
+            {
+                Log.UserWarning("API:ActivateStatic: Can´t find a static with the UUID: " + uuid);
                 return false;
             }
         }

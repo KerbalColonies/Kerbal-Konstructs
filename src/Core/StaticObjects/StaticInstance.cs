@@ -38,6 +38,8 @@ namespace KerbalKonstructs.Core
         [CFGSetting]
         public float ModelScale = 1f;
 
+        internal float ModelScaleSave = -1f;
+
         // Legacy Faclility Setting
         [CFGSetting]
         public string FacilityType = "None";
@@ -259,6 +261,8 @@ namespace KerbalKonstructs.Core
             CelestialBody.CBUpdate();
             isSpawned = true;
 
+            ModelScaleSave = -1;
+
             mesh = ModelVariant.SpawnVariant(this);
             {
                 if (_mesh == null)
@@ -273,7 +277,7 @@ namespace KerbalKonstructs.Core
             {
                 //Debug.Log("@@@ Spawning Squad static " + model.name);
                 //Debug.Log("Tree: \n" + PrintChildren(mesh, ""));
-                
+
                 InstanceUtil.MangleSquadStatic(this);
             }
             InstanceUtil.SetLayerRecursively(this, 15);
