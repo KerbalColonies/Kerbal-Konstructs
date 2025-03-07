@@ -11,7 +11,9 @@ namespace KerbalKonstructs
     {
 
         internal static Action<GameObject> OnBuildingSpawned = delegate { };
-        internal static Action<StaticInstance> OnBuildingClicked = delegate { };
+        internal static Action<StaticInstance> OnStaticClicked = delegate { };
+        internal static Action<StaticInstance> OnStaticMouseEnter = delegate { };
+        internal static Action<StaticInstance> OnStaticMouseExit = delegate { };
         internal static Action<GroupCenter> OnGroupSaved = delegate { };
 
         public static string SpawnObject(string modelName)
@@ -407,15 +409,36 @@ namespace KerbalKonstructs
             OnBuildingSpawned -= action;
         }
 
-        public static void RegisterOnBuildingClicked(Action<StaticInstance> action)
+        public static void RegisterOnStaticClicked(Action<StaticInstance> action)
         {
-            OnBuildingClicked += action;
+            OnStaticClicked += action;
         }
 
-        public static void UnRegisterOnBuildingClicked(Action<StaticInstance> action)
+        public static void UnRegisterOnStaticClicked(Action<StaticInstance> action)
         {
-            OnBuildingClicked -= action;
+            OnStaticClicked -= action;
         }
+
+        public static void RegisterOnStaticMouseEnter(Action<StaticInstance> action)
+        {
+            OnStaticMouseEnter += action;
+        }
+
+        public static void UnRegisterOnStaticMouseEnter(Action<StaticInstance> action)
+        {
+            OnStaticMouseEnter -= action;
+        }
+
+        public static void RegisterOnStaticMouseExit(Action<StaticInstance> action)
+        {
+            OnStaticMouseExit += action;
+        }
+
+        public static void UnRegisterOnStaticMouseExit(Action<StaticInstance> action)
+        {
+            OnStaticMouseExit -= action;
+        }
+
 
         public static void RegisterOnGroupSaved(Action<GroupCenter> action)
         {

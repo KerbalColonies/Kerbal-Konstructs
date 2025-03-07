@@ -94,7 +94,7 @@ namespace KerbalKonstructs.Core
         /// Set the SpaceCenterCam to the location os the current LaunchSite
         /// </summary>
         /// <param name="currentSite"></param>
-        internal static void SetSpaceCenterCam(KKLaunchSite currentSite)
+        public static void SetSpaceCenterCam(KKLaunchSite currentSite)
         {
 
             if (KerbalKonstructs.focusLastLaunchSite && (currentSite.body.name == ConfigUtil.GetCelestialBody("HomeWorld").name))

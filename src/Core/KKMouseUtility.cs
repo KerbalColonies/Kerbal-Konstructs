@@ -38,7 +38,7 @@ namespace KerbalKonstructs.Core
                 Initialize();
             }
 
-            API.OnBuildingClicked.Invoke(staticInstance);
+            API.OnStaticClicked.Invoke(staticInstance);
         }
 
         void OnMouseEnter()
@@ -48,11 +48,7 @@ namespace KerbalKonstructs.Core
                 Initialize();
             }
 
-            if (HighLogic.LoadedScene == GameScenes.FLIGHT)
-            {
-
-            }
-
+            API.OnStaticMouseEnter.Invoke(staticInstance);
         }
 
         void OnMouseExit()
@@ -61,6 +57,8 @@ namespace KerbalKonstructs.Core
             {
                 Initialize();
             }
+
+            API.OnStaticMouseExit.Invoke(staticInstance);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace KerbalKonstructs
     public class KerbalKonstructs : MonoBehaviour
     {
         // Hello
-        internal static KerbalKonstructs instance;
+        public static KerbalKonstructs instance;
 
         internal static readonly string sKKVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
 
