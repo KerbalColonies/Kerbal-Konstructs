@@ -54,7 +54,7 @@ namespace KerbalKonstructs.UI
 
         #region Switches
         // Switches
-        internal Boolean enableColliders = false;
+        public Boolean enableColliders = false;
         internal Boolean enableColliders2 = false;
         //internal static bool isScanable = false;
 

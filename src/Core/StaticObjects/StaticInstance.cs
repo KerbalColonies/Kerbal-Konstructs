@@ -38,6 +38,8 @@ namespace KerbalKonstructs.Core
         [CFGSetting]
         public float ModelScale = 1f;
 
+        internal float ModelScaleSave = -1f;
+
         // Legacy Faclility Setting
         [CFGSetting]
         public string FacilityType = "None";
@@ -64,7 +66,7 @@ namespace KerbalKonstructs.Core
         [CFGSetting]
         public string VariantName;
 
-        internal GameObject gameObject;
+        public GameObject gameObject;
         private GameObject _mesh = null;
 
         internal GameObject mesh
@@ -108,7 +110,7 @@ namespace KerbalKonstructs.Core
 
 
         internal Transform transform => gameObject.transform;
-        internal Vector3 position => gameObject.transform.position;
+        public Vector3 position => gameObject.transform.position;
 
         internal StaticModel model;
 
@@ -211,7 +213,7 @@ namespace KerbalKonstructs.Core
             }
         }
 
-        internal void ToggleAllColliders(bool enable)
+        public void ToggleAllColliders(bool enable)
         {
             Transform[] gameObjectList = gameObject.GetComponentsInChildren<Transform>();
 
@@ -259,6 +261,8 @@ namespace KerbalKonstructs.Core
             CelestialBody.CBUpdate();
             isSpawned = true;
 
+            ModelScaleSave = -1;
+
             mesh = ModelVariant.SpawnVariant(this);
             {
                 if (_mesh == null)
@@ -273,7 +277,7 @@ namespace KerbalKonstructs.Core
             {
                 //Debug.Log("@@@ Spawning Squad static " + model.name);
                 //Debug.Log("Tree: \n" + PrintChildren(mesh, ""));
-                
+
                 InstanceUtil.MangleSquadStatic(this);
             }
             InstanceUtil.SetLayerRecursively(this, 15);
@@ -516,7 +520,7 @@ namespace KerbalKonstructs.Core
             this.HighlightObject(Color.black);
         }
 
-        internal void SaveConfig()
+        public void SaveConfig()
         {
             ConfigParser.SaveInstanceByCfg(configPath);
         }
@@ -559,6 +563,16 @@ namespace KerbalKonstructs.Core
             }
 
             TrySpawn();
+
+            foreach (Collider colloder in gameObject.GetComponentsInChildren<Collider>(true).Where(col => col.isTrigger == false))
+            {
+                if (colloder.gameObject.GetComponent<KKMouseUtility>() == null)
+                {
+                    KKMouseUtility selector = colloder.gameObject.AddComponent<KKMouseUtility>();
+                    selector.staticInstance = this;
+                    selector.enabled = true;
+                }
+            }
 
             isActive = true;
             gameObject.SetActive(true);

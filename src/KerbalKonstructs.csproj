@@ -147,6 +147,7 @@
     <Compile Include="Core\MapDecals\MapDecalInstance.cs" />
     <Compile Include="Core\MapDecals\MapDecalsMap.cs" />
     <Compile Include="Core\MapDecals\MapDecalUtils.cs" />
+    <Compile Include="Core\KKMouseUtility.cs" />
     <Compile Include="Core\SpaceCenters\ScExtention.cs" />
     <Compile Include="Core\SquadStatics.cs" />
     <Compile Include="Core\StaticGroup\BuiltinCenters.cs" />

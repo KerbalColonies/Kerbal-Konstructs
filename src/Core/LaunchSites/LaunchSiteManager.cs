@@ -308,7 +308,7 @@ namespace KerbalKonstructs.Core
         /// Registers the a created LaunchSite to the PSystemSetup and LaunchSiteManager
         /// </summary>
         /// <param name="site"></param>
-        internal static void RegisterLaunchSite(KKLaunchSite site)
+        public static void RegisterLaunchSite(KKLaunchSite site)
         {
 
             if (string.IsNullOrEmpty(site.LaunchSiteName))
