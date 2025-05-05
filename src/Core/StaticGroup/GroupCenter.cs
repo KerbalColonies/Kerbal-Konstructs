@@ -382,7 +382,7 @@ namespace KerbalKonstructs.Core
         /// Writes out the GroupCenter config
         /// </summary>
         /// <param name="instance"></param>
-        internal void Save()
+        public void Save()
         {
             if (isBuiltIn)
             {
@@ -424,6 +424,7 @@ namespace KerbalKonstructs.Core
                 instance.Orientation = sourceInstance.Orientation;
                 instance.CelestialBody = CelestialBody;
                 instance.ModelScale = sourceInstance.ModelScale;
+                instance.VariantName = sourceInstance.VariantName;
 
                 instance.Group = Group;
                 instance.groupCenter = this;
