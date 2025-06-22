@@ -358,40 +358,32 @@ namespace KerbalKonstructs.UI
                     GUILayout.FlexibleSpace();
 
 
-                    if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
-                    {
+                    if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
                         SetTransform(Vector3.back * increment);
-                    }
-                    if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
-                    {
+                    if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
                         SetTransform(Vector3.forward * increment);
-                    }
+
                     GUILayout.EndHorizontal();
 
                     GUILayout.BeginHorizontal();
                     GUILayout.Label("Left / Right:");
                     GUILayout.FlexibleSpace();
-                    if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
-                    {
+
+                    if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
                         SetTransform(Vector3.left * increment);
-                    }
-                    if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
-                    {
+                    if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
                         SetTransform(Vector3.right * increment);
-                    }
+
                     GUILayout.EndHorizontal();
 
                     GUILayout.BeginHorizontal();
                     GUILayout.Label("Down / Up:");
                     GUILayout.FlexibleSpace();
-                    if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
-                    {
+
+                    if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
                         SetTransform(Vector3.down * increment);
-                    }
-                    if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
-                    {
+                    if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
                         SetTransform(Vector3.up * increment);
-                    }
 
                 }
                 else
@@ -400,27 +392,21 @@ namespace KerbalKonstructs.UI
                     GUILayout.FlexibleSpace();
 
 
-                    if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
-                    {
+                    if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
                         Setlatlng(0d, -increment);
-                    }
-                    if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
-                    {
+                    if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
                         Setlatlng(0d, increment);
-                    }
+
                     GUILayout.EndHorizontal();
 
                     GUILayout.BeginHorizontal();
                     GUILayout.Label("South / North:");
                     GUILayout.FlexibleSpace();
-                    if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
-                    {
+
+                    if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
                         Setlatlng(-increment, 0d);
-                    }
-                    if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
-                    {
+                    if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
                         Setlatlng(increment, 0d);
-                    }
 
                 }
             }
@@ -447,22 +433,11 @@ namespace KerbalKonstructs.UI
                 GUILayout.FlexibleSpace();
                 GUILayout.TextField(selectedDecal.Angle.ToString(), 9, GUILayout.Width(80));
 
-                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(23)))
-                {
+                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(23)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(23)))
                     SetRotation(-increment);
-                }
-                if (GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(23)))
-                {
-                    SetRotation(-increment);
-                }
-                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(23)))
-                {
+                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(23)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(23)))
                     SetRotation(increment);
-                }
-                if (GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(23)))
-                {
-                    SetRotation(increment);
-                }
+
             }
             GUILayout.EndHorizontal();
             GUILayout.Box(tHorizontalSep, BoxNoBorder, GUILayout.Height(4));
@@ -476,22 +451,11 @@ namespace KerbalKonstructs.UI
                 GUILayout.FlexibleSpace();
                 GUILayout.TextField(selectedDecal.Order.ToString(), 9, GUILayout.Width(80));
 
-                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(23)))
-                {
+                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(23)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(23)))
                     selectedDecal.Order = Math.Max(100000, selectedDecal.Order - 1);
-                }
-                if (GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(23)))
-                {
-                    selectedDecal.Order = Math.Max(100000, selectedDecal.Order - 1);
-                }
-                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(23)))
-                {
+                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(23)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(23)))
                     selectedDecal.Order += 1;
-                }
-                if (GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(23)))
-                {
-                    selectedDecal.Order += 1;
-                }
+
             }
             GUILayout.EndHorizontal();
             GUILayout.Box(tHorizontalSep, BoxNoBorder, GUILayout.Height(4));
@@ -505,24 +469,14 @@ namespace KerbalKonstructs.UI
                 GUILayout.FlexibleSpace();
                 GUILayout.TextField(selectedDecal.Radius.ToString(), 9, GUILayout.Width(80));
 
-                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(23)))
+                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(23)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(23)))
                 {
                     selectedDecal.Radius -= increment;
                     selectedDecal.Radius = Math.Max(1, selectedDecal.Radius);
                 }
-                if (GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(23)))
-                {
-                    selectedDecal.Radius -= increment;
-                    selectedDecal.Radius = Math.Max(1, selectedDecal.Radius);
-                }
-                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(23)))
-                {
+                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(23)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(23)))
                     selectedDecal.Radius += increment;
-                }
-                if (GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(23)))
-                {
-                    selectedDecal.Radius += increment;
-                }
+
             }
             GUILayout.EndHorizontal();
 
@@ -550,14 +504,12 @@ namespace KerbalKonstructs.UI
                 GUILayout.Label("Absolut offset:");
                 GUILayout.FlexibleSpace();
                 selectedDecal.AbsolutOffset = float.Parse(GUILayout.TextField(selectedDecal.AbsolutOffset.ToString(), 25, GUILayout.Width(75)));
-                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
-                {
+
+                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
                     SetTransform(Vector3.down * increment);
-                }
-                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
-                {
+                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
                     SetTransform(Vector3.up * increment);
-                }
+
             }
             GUILayout.EndHorizontal();
             GUILayout.Box(tHorizontalSep, BoxNoBorder, GUILayout.Height(4));
@@ -592,15 +544,12 @@ namespace KerbalKonstructs.UI
                 GUILayout.Label("HeightMapDeformity:");
                 GUILayout.FlexibleSpace();
                 selectedDecal.HeightMapDeformity = double.Parse(GUILayout.TextField(selectedDecal.HeightMapDeformity.ToString(), 25, GUILayout.Width(75)));
-                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
-                {
+
+                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
                     selectedDecal.HeightMapDeformity -= increment;
-                    //selectedDecal.HeightMapDeformity = Math.Max(0, selectedDecal.HeightMapDeformity);
-                }
-                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
-                {
+                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
                     selectedDecal.HeightMapDeformity += increment;
-                }
+
             }
             GUILayout.EndHorizontal();
 
@@ -610,15 +559,15 @@ namespace KerbalKonstructs.UI
                 GUILayout.Label("SmoothHeight:");
                 GUILayout.FlexibleSpace();
                 selectedDecal.SmoothHeight = float.Parse(GUILayout.TextField(selectedDecal.SmoothHeight.ToString(), 25, GUILayout.Width(75)));
-                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
+
+                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
                 {
                     selectedDecal.SmoothHeight -= increment;
                     selectedDecal.SmoothHeight = Math.Max(0, selectedDecal.SmoothHeight);
                 }
-                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
-                {
+                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
                     selectedDecal.SmoothHeight += increment;
-                }
+
             }
             GUILayout.EndHorizontal();
             GUILayout.Box(tHorizontalSep, BoxNoBorder, GUILayout.Height(4));
@@ -653,15 +602,15 @@ namespace KerbalKonstructs.UI
                 GUILayout.Label("SmoothColor:");
                 GUILayout.FlexibleSpace();
                 selectedDecal.SmoothColor = float.Parse(GUILayout.TextField(selectedDecal.SmoothColor.ToString(), 25, GUILayout.Width(75)));
-                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
+
+                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
                 {
                     selectedDecal.SmoothColor -= increment;
                     selectedDecal.SmoothColor = Math.Max(0, selectedDecal.SmoothColor);
                 }
-                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
-                {
+                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
                     selectedDecal.SmoothColor += increment;
-                }
+
             }
             GUILayout.EndHorizontal();
 
