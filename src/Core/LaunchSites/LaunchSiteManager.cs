@@ -479,7 +479,7 @@ namespace KerbalKonstructs.Core
         /// Removes the launchSite from the facilities
         /// </summary>
         /// <param name="site"></param>
-        internal static void UnregisterLaunchSite(KKLaunchSite site)
+        public static void UnregisterLaunchSite(KKLaunchSite site)
         {
             if (site.isOpen)
             {
@@ -510,7 +510,7 @@ namespace KerbalKonstructs.Core
         /// Deletes a LaunchSite from the internal Database
         /// </summary>
         /// <param name="site2delete"></param>
-        internal static void DeleteLaunchSite(KKLaunchSite site2delete)
+        public static void DeleteLaunchSite(KKLaunchSite site2delete)
         {
             if (launchSites.Contains(site2delete))
             {
