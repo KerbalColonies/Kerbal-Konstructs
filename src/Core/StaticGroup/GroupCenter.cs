@@ -34,32 +34,32 @@ namespace KerbalKonstructs.Core
         [CFGSetting]
         public bool SeaLevelAsReference = false;
         [CFGSetting]
-        internal double RefLatitude = 361d;
+        public double RefLatitude = 361d;
         [CFGSetting]
-        internal double RefLongitude = 361d;
+        public double RefLongitude = 361d;
 
 
         public UrlDir.UrlConfig configUrl;
         public String configPath = null;
 
-        internal GameObject gameObject;
+        public GameObject gameObject;
         internal PQSCity pqsCity;
         private Vector3 origScale = new Vector3(1, 1, 1);
 
-        internal List<StaticInstance> childInstances = new List<StaticInstance>();
-        internal bool isActive = true;
+        public List<StaticInstance> childInstances = new List<StaticInstance>();
+        public bool isActive = true;
 
-        internal List<KKLaunchSite> launchsites = new List<KKLaunchSite>();
+        public List<KKLaunchSite> launchsites = new List<KKLaunchSite>();
 
-        internal bool hidden = false;
-        internal bool isBuiltIn = false;
-        internal bool isInSavegame = false;
-
-
+        public bool hidden = false;
+        public bool isBuiltIn = false;
+        public bool isInSavegame = false;
 
 
 
-        internal bool isHidden
+
+
+        public bool isHidden
         {
             get
             {
@@ -197,7 +197,7 @@ namespace KerbalKonstructs.Core
 
         }
 
-        internal void RenameGroup(string newName)
+        public void RenameGroup(string newName)
         {
             StaticDatabase.RemoveGroupCenter(this);
             Group = newName;
@@ -212,7 +212,7 @@ namespace KerbalKonstructs.Core
 
         }
 
-        internal void AddInstance(StaticInstance instance)
+        public void AddInstance(StaticInstance instance)
         {
             if (!childInstances.Contains(instance))
             {
@@ -222,7 +222,7 @@ namespace KerbalKonstructs.Core
         }
 
 
-        internal void RemoveInstance(StaticInstance instance)
+        public void RemoveInstance(StaticInstance instance)
         {
             if (childInstances.Contains(instance))
             {
@@ -232,7 +232,7 @@ namespace KerbalKonstructs.Core
 
 
 
-        internal void SetInstancesEnabled(bool isInRange)
+        public void SetInstancesEnabled(bool isInRange)
         {
             if (isInRange == isActive)
             {
@@ -262,7 +262,7 @@ namespace KerbalKonstructs.Core
         /// </summary>
         /// <param name="distance"></param>
         /// <param name="maxDistance"></param>
-        internal void CheckIfInRange(float distance, float maxDistance)
+        public void CheckIfInRange(float distance, float maxDistance)
         {
 
             if (distance < 5000  && isHidden)
@@ -277,7 +277,7 @@ namespace KerbalKonstructs.Core
             SetInstancesEnabled(isInRange);
         }
 
-        internal static void ActivateInstance(StaticInstance instance)
+        public static void ActivateInstance(StaticInstance instance)
         {
             switch (instance.FacilityType)
             {
@@ -296,7 +296,7 @@ namespace KerbalKonstructs.Core
             }
         }
 
-        internal static void DeActivateInstance(StaticInstance instance)
+        public static void DeActivateInstance(StaticInstance instance)
         {
             switch (instance.FacilityType)
             {
@@ -316,7 +316,7 @@ namespace KerbalKonstructs.Core
         }
 
 
-        internal void Update()
+        public void Update()
         {
             if (pqsCity != null)
             {
@@ -444,7 +444,7 @@ namespace KerbalKonstructs.Core
         }
 
 
-        internal void DeleteGroupCenter()
+        public void DeleteGroupCenter()
         {
             foreach (StaticInstance child in childInstances.ToArray())
             {
@@ -469,7 +469,7 @@ namespace KerbalKonstructs.Core
             pqsCity.repositionToSphereSurfaceAddHeight = !SeaLevelAsReference;
         }
 
-        internal double surfaceHeight
+        public double surfaceHeight
         {
             get
             {
@@ -477,7 +477,7 @@ namespace KerbalKonstructs.Core
             }
         }
 
-        internal string dbKey
+        public string dbKey
         {
             get
             {
@@ -488,7 +488,7 @@ namespace KerbalKonstructs.Core
             }
         }
 
-        internal float heading
+        public float heading
         {
             get
             {

@@ -139,7 +139,6 @@ namespace KerbalKonstructs
             if (model != null)
             {
                 StaticInstance instance = new StaticInstance();
-                instance.isInSavegame = true;
 
                 instance.heighReference = HeightReference.Terrain;
 

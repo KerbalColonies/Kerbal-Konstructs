@@ -121,7 +121,7 @@ namespace KerbalKonstructs.Core
 
         internal GroupCenter groupCenter = null;
 
-        internal bool isInSavegame = false;
+        public bool isInSavegame = false;
 
         internal bool isDestroyed = false;
 
