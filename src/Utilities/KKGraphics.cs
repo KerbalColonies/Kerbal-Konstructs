@@ -179,7 +179,7 @@ namespace KerbalKonstructs
             }
             // here you should never end
             Log.Error("Something went wrong for: " + texture.name);
-            Log.Error("Should be chached here: " + filename);
+            Log.Error("Should be cached here: " + filename);
 
             return null;
         }
@@ -197,7 +197,7 @@ namespace KerbalKonstructs
                 //Log.Error("Called with no Texture");
                 return;
             }
-            //Log.Normal("Normal Map ChacheName: " + filename);
+            //Log.Normal("Normal Map CacheName: " + filename);
 
             Material converter = new Material(GetShader("KK/Calc/NormalFromTexture"));
             converter.mainTexture = texture;
