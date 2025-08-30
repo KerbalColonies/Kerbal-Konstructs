@@ -132,6 +132,8 @@ namespace KerbalKonstructs.Modules
                     continue;
                 }
 
+                if (groundStation.CelestialBody != body) continue;
+
                 isOpen = ((GroundStation)groundStation.myFacilities[0]).isOpen;
 
 
@@ -231,6 +233,8 @@ namespace KerbalKonstructs.Modules
                     continue;
                 }
 
+                if (launchSite.body != body) continue;
+
                 Vector3 lsPosition = MapView.MapCamera.GetComponent<Camera>().WorldToScreenPoint(ScaledSpace.LocalToScaledSpace(launchSitePosition));
                 screenRect = new Rect((lsPosition.x - 8), (Screen.height - lsPosition.y) - 8, 16, 16);
 
@@ -310,6 +314,8 @@ namespace KerbalKonstructs.Modules
                 {
                     continue;
                 }
+
+                if (customSpaceCenter.staticInstance.CelestialBody != body) continue;
 
                 cscIsOpen = customSpaceCenter.isOpen;
 

@@ -1,5 +1,6 @@
 ﻿using KerbalKonstructs.Core;
 using KerbalKonstructs.Modules;
+using KerbalKonstructs.Modules.Career;
 
 
 namespace KerbalKonstructs.Career
@@ -27,6 +28,10 @@ namespace KerbalKonstructs.Career
             {
                 return;
             }
+
+            CareerMapDecals.LoadDecals(node);
+
+            CareerGroups.LoadGroups(node);
 
             CareerObjects.LoadBuildings(node);
 
@@ -92,6 +97,10 @@ namespace KerbalKonstructs.Career
             Log.Normal("KKScenario saving career state");
             CareerState.Save(node);
             //}
+
+            CareerMapDecals.SaveDecals(node);
+
+            CareerGroups.SaveGroups(node);
 
             CareerObjects.SaveBuildings(node);
         }

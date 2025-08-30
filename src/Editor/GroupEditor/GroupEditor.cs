@@ -7,6 +7,11 @@ namespace KerbalKonstructs.UI
 {
     public class GroupEditor : KKWindow
     {
+        public enum GroupEditorMode
+        {
+            Group,
+            StaticOffset
+        }
 
         protected static GroupEditor _instance = null;
         public static GroupEditor instance
@@ -54,8 +59,10 @@ namespace KerbalKonstructs.UI
 
         #region GUI Windows
         // GUI Windows
-        public Rect toolRect = new Rect(300, 35, 330, 350);
-
+        public Rect toolRect = new Rect(300, 35, 330, 380);
+        public static Vector2 groupEditorSize = new Vector2(330, 380);
+        public static Vector2 staticOffsetEditorSize = new Vector2(330, 445);
+        public static int NamechangeSize = 80;
         #endregion
 
 
@@ -64,6 +71,7 @@ namespace KerbalKonstructs.UI
 
         public static GroupCenter selectedGroup = null;
         public GroupCenter selectedObjectPrevious = null;
+        public static GroupEditorMode editorMode = GroupEditorMode.Group;
 
         public string refLat, refLng, headingStr;
 
@@ -88,7 +96,7 @@ namespace KerbalKonstructs.UI
 
         protected static Vector3 startPosition = Vector3.zero;
 
-        public static float maxEditorRange = 250;
+        public static float maxEditorRange = 0;
 
         #endregion
 
@@ -120,6 +128,8 @@ namespace KerbalKonstructs.UI
             EditorGizmo.CloseGizmo();
             CloseEditors();
             selectedObjectPrevious = null;
+            editorMode = GroupEditorMode.Group;
+            toolRect.size = groupEditorSize;
             base.Close();
         }
 
@@ -201,15 +211,17 @@ namespace KerbalKonstructs.UI
             {
                 showNameField = true;
                 newGroupName = selectedGroup.Group;
+                if (editorMode == GroupEditorMode.Group) toolRect.size = groupEditorSize;
+                else if (editorMode == GroupEditorMode.StaticOffset) toolRect.size = staticOffsetEditorSize;
+                toolRect.height += NamechangeSize;
             }
             GUILayout.EndHorizontal();
 
             if (showNameField)
             {
-
                 GUILayout.Label("Enter new Name: ");
 
-                newGroupName = GUILayout.TextField(newGroupName, 15, GUILayout.Width(150));
+                newGroupName = GUILayout.TextField(newGroupName, GUILayout.Width(150));
 
                 GUILayout.BeginHorizontal();
                 {
@@ -217,10 +229,14 @@ namespace KerbalKonstructs.UI
                     {
                         selectedGroup.RenameGroup(newGroupName);
                         showNameField = false;
+                        if (editorMode == GroupEditorMode.Group) toolRect.size = groupEditorSize;
+                        else if (editorMode == GroupEditorMode.StaticOffset) toolRect.size = staticOffsetEditorSize;
                     }
                     if (GUILayout.Button("Cancel", GUILayout.Height(23)))
                     {
                         showNameField = false;
+                        if (editorMode == GroupEditorMode.Group) toolRect.size = groupEditorSize;
+                        else if (editorMode == GroupEditorMode.StaticOffset) toolRect.size = staticOffsetEditorSize;
                     }
                 }
                 GUILayout.EndHorizontal();
@@ -285,6 +301,32 @@ namespace KerbalKonstructs.UI
             }
             GUILayout.EndHorizontal();
 
+            GUILayout.BeginHorizontal();
+            {
+                GUILayout.Label("Editor Mode: ");
+                GUILayout.FlexibleSpace();
+
+                GUI.enabled = editorMode != GroupEditorMode.Group;
+                if (GUILayout.Button("Group", GUILayout.Height(23)))
+                {
+                    editorMode = GroupEditorMode.Group;
+
+                    toolRect.size = groupEditorSize;
+                    if (showNameField) toolRect.height += NamechangeSize;
+                }
+                GUI.enabled = editorMode != GroupEditorMode.StaticOffset;
+                if (GUILayout.Button("Static offset", GUILayout.Height(23)))
+                {
+                    editorMode = GroupEditorMode.StaticOffset;
+
+                    toolRect.size = staticOffsetEditorSize;
+                    if (showNameField) toolRect.height += NamechangeSize;
+                }
+                GUI.enabled = true;
+            }
+            GUILayout.EndHorizontal();
+            if (editorMode == GroupEditorMode.StaticOffset) GUILayout.Label("Static offset mode: changes the offset of the group statics but does NOT change the group position.");
+
             //
             // Set reference butons
             //
@@ -324,27 +366,22 @@ namespace KerbalKonstructs.UI
                 if (foldedIn)
                     fTempWidth = 40f;
 
-                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
-                {
+                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
                     SetTransform(Vector3.back * increment);
-                }
-                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
-                {
+                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
                     SetTransform(Vector3.forward * increment);
-                }
+
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("Left / Right:");
                 GUILayout.FlexibleSpace();
-                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
-                {
+
+                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
                     SetTransform(Vector3.left * increment);
-                }
-                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
-                {
+                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
                     SetTransform(Vector3.right * increment);
-                }
+
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
@@ -358,27 +395,22 @@ namespace KerbalKonstructs.UI
                 if (foldedIn)
                     fTempWidth = 40f;
 
-                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
-                {
+                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
                     Setlatlng(0d, -increment);
-                }
-                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
-                {
+                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
                     Setlatlng(0d, increment);
-                }
+
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("South / North:");
                 GUILayout.FlexibleSpace();
-                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
-                {
+
+                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
                     Setlatlng(-increment, 0d);
-                }
-                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
-                {
+                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
                     Setlatlng(increment, 0d);
-                }
+
             }
 
             GUILayout.EndHorizontal();
@@ -405,15 +437,60 @@ namespace KerbalKonstructs.UI
                 GUILayout.Label("Alt.");
                 GUILayout.FlexibleSpace();
                 selectedGroup.RadiusOffset = float.Parse(GUILayout.TextField(selectedGroup.RadiusOffset.ToString(), 25, GUILayout.Width(fTempWidth)));
-                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
+                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
                 {
-                    selectedGroup.RadiusOffset -= increment;
+                    if (editorMode == GroupEditorMode.Group)
+                    {
+                        selectedGroup.RadiusOffset -= increment;
+                        ApplySettings();
+                        if (!CheckRange(selectedGroup.gameObject.transform.position))
+                        {
+                            Log.Debug("Position out of range, reverting changes.");
+                            selectedGroup.RadiusOffset += increment;
+                            ApplySettings();
+                        }
+                    }
+                    else if (editorMode == GroupEditorMode.StaticOffset)
+                    {
+                        selectedGroup.childInstances.ForEach(instance =>
+                        {
+                            instance.RelativePosition.y -= increment;
+
+                            instance.RadiusOffset -= increment;
+
+                            instance.gameObject.transform.localPosition -= Vector3.up * increment;
+                        });
+                    }
+
                     ApplySettings();
+
                 }
-                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
+                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
                 {
-                    selectedGroup.RadiusOffset += increment;
-                    ApplySettings();
+                    if (editorMode == GroupEditorMode.Group)
+                    {
+                        selectedGroup.RadiusOffset += increment;
+                        ApplySettings();
+                        if (!CheckRange(selectedGroup.gameObject.transform.position))
+                        {
+                            Log.Debug("Position out of range, reverting changes.");
+                            selectedGroup.RadiusOffset -= increment;
+                            ApplySettings();
+                        }
+                    }
+                    else if (editorMode == GroupEditorMode.StaticOffset)
+                    {
+                        selectedGroup.childInstances.ForEach(instance =>
+                        {
+                            instance.RelativePosition.y += increment;
+
+                            instance.RadiusOffset += increment;
+
+                            instance.gameObject.transform.localPosition += Vector3.up * increment;
+                        });
+                        ApplySettings();
+                    }
+
                 }
             }
             GUILayout.EndHorizontal();
@@ -434,22 +511,11 @@ namespace KerbalKonstructs.UI
                 GUILayout.FlexibleSpace();
                 headingStr = GUILayout.TextField(headingStr, 9, GUILayout.Width(fTempWidth));
 
-                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(23)))
-                {
+                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(23)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(23)))
                     SetRotation(-increment);
-                }
-                if (GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(23)))
-                {
-                    SetRotation(-increment);
-                }
-                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(23)))
-                {
+                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(23)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(23)))
                     SetRotation(increment);
-                }
-                if (GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(23)))
-                {
-                    SetRotation(increment);
-                }
+
             }
             GUILayout.EndHorizontal();
 
@@ -532,6 +598,7 @@ namespace KerbalKonstructs.UI
 
         #region Utility Functions
 
+        public bool CheckRange(Vector3 targetPos) => maxEditorRange == 0 || FlightGlobals.ActiveVessel == null || Vector3.Distance(FlightGlobals.ActiveVessel.transform.position, targetPos) <= maxEditorRange;
 
         public void DeleteGroupCenter()
         {
@@ -748,12 +815,47 @@ namespace KerbalKonstructs.UI
         {
             body = Planetarium.fetch.CurrentMainBody;
             double latOffset = north / (body.Radius * KKMath.deg2rad);
-            selectedGroup.RefLatitude += latOffset;
             double lonOffset = east / (body.Radius * KKMath.deg2rad);
-            selectedGroup.RefLongitude += lonOffset * Math.Cos(Mathf.Deg2Rad * selectedGroup.RefLatitude);
 
-            selectedGroup.RadialPosition = body.GetRelSurfaceNVector(selectedGroup.RefLatitude, selectedGroup.RefLongitude).normalized * body.Radius;
-            ApplySettings();
+            if (editorMode == GroupEditorMode.Group)
+            {
+                double oldLat = selectedGroup.RefLatitude;
+                double oldLon = selectedGroup.RefLongitude;
+                Vector3 oldRad = selectedGroup.RadialPosition;
+
+                selectedGroup.RefLatitude += latOffset;
+
+                selectedGroup.RefLongitude += lonOffset * Math.Cos(Mathf.Deg2Rad * selectedGroup.RefLatitude);
+
+                selectedGroup.RadialPosition = body.GetRelSurfaceNVector(selectedGroup.RefLatitude, selectedGroup.RefLongitude).normalized * body.Radius;
+
+                ApplySettings();
+
+                if (!CheckRange(selectedGroup.gameObject.transform.position))
+                {
+                    Log.Debug("Position out of range, reverting changes.");
+                    selectedGroup.RefLatitude = oldLat;
+                    selectedGroup.RefLongitude = oldLon;
+                    selectedGroup.RadialPosition = oldRad;
+                    ApplySettings();
+                }
+            }
+            else if (editorMode == GroupEditorMode.StaticOffset)
+            {
+                selectedGroup.childInstances.ForEach(instance =>
+                {
+                    instance.RefLatitude += latOffset;
+                    instance.RefLongitude += lonOffset * Math.Cos(Mathf.Deg2Rad * instance.RefLatitude);
+
+                    instance.gameObject.transform.position = instance.CelestialBody.GetWorldSurfacePosition(instance.RefLatitude, instance.RefLongitude, instance.RadiusOffset);
+
+                    instance.RelativePosition = instance.gameObject.transform.localPosition;
+                    instance.RadiusOffset = (float)((instance.surfaceHeight - instance.groupCenter.surfaceHeight) + instance.RelativePosition.y);
+
+                    ApplySettings();
+                });
+            }
+
         }
 
 
@@ -766,7 +868,7 @@ namespace KerbalKonstructs.UI
         /// <param name="increment"></param>
         public void SetRotation(float increment)
         {
-            selectedGroup.RotationAngle += (float)increment;
+            selectedGroup.RotationAngle += increment;
             selectedGroup.RotationAngle = (360f + selectedGroup.RotationAngle) % 360f;
             ApplySettings();
         }
@@ -778,31 +880,61 @@ namespace KerbalKonstructs.UI
         /// <param name="direction"></param>
         public void SetTransform(Vector3 direction)
         {
-            // adjust transform for scaled models
-            direction = direction / selectedGroup.ModelScale;
-            direction = selectedGroup.gameObject.transform.TransformVector(direction);
-            double northInc = Vector3d.Dot(northVector, direction);
-            double eastInc = Vector3d.Dot(eastVector, direction);
+            if (editorMode == GroupEditorMode.Group)
+            {
+                direction = selectedGroup.gameObject.transform.TransformVector(direction);
+                double northInc = Vector3d.Dot(northVector, direction);
+                double eastInc = Vector3d.Dot(eastVector, direction);
 
-            Setlatlng(northInc, eastInc);
-
+                Setlatlng(northInc, eastInc);
+            }
+            else if (editorMode == GroupEditorMode.StaticOffset)
+            {
+                selectedGroup.childInstances.ForEach(instance =>
+                {
+                    instance.transform.localPosition += direction;
+                    instance.Update();
+                });
+            }
         }
-
 
         public void OnMoveCallBack(Vector3 vector)
         {
             // Log.Normal("OnMove: " + vector.ToString());
             //moveGizmo.transform.position += 3* vector;
 
-            selectedGroup.gameObject.transform.position = EditorGizmo.moveGizmo.transform.position;
-            selectedGroup.RadialPosition = selectedGroup.gameObject.transform.localPosition;
+            if (editorMode == GroupEditorMode.Group)
+            {
+                if (!CheckRange(EditorGizmo.moveGizmo.transform.position))
+                {
+                    Log.Debug("Position out of range, reverting changes.");
+                    return;
+                }
 
-            double alt;
-            selectedGroup.CelestialBody.GetLatLonAlt(EditorGizmo.moveGizmo.transform.position, out selectedGroup.RefLatitude, out selectedGroup.RefLongitude, out alt);
+                selectedGroup.gameObject.transform.position = EditorGizmo.moveGizmo.transform.position;
+                selectedGroup.RadialPosition = selectedGroup.gameObject.transform.localPosition;
 
-            selectedGroup.RadiusOffset = (float)(alt - selectedGroup.surfaceHeight);
-            //float oldY = selectedInstance.gameObject.transform.localPosition.y;
+                double alt;
+                selectedGroup.CelestialBody.GetLatLonAlt(EditorGizmo.moveGizmo.transform.position, out selectedGroup.RefLatitude, out selectedGroup.RefLongitude, out alt);
 
+                selectedGroup.RadiusOffset = (float)(alt - selectedGroup.surfaceHeight);
+            }
+            else if (editorMode == GroupEditorMode.StaticOffset)
+            {
+                // continues movement, longitude and height are swapped
+
+                vector /= 8;
+
+                selectedGroup.childInstances.ForEach(instance =>
+                {
+                    instance.gameObject.transform.position += vector;
+                    
+                    instance.RelativePosition = instance.gameObject.transform.localPosition;
+                    instance.RadiusOffset = -(float)((instance.surfaceHeight - instance.groupCenter.surfaceHeight) + instance.RelativePosition.y);                    
+                });
+
+                EditorGizmo.moveGizmo.transform.position += vector;
+            }
         }
 
         public void WhenMovedCallBack(Vector3 vector)

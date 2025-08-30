@@ -373,42 +373,33 @@ namespace KerbalKonstructs.UI
             GUILayout.FlexibleSpace();
             posZStr = (GUILayout.TextField(posZStr, 11, GUILayout.Width(fTempWidth)));
 
-            if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
-            {
+            if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
                 SetTransform(Vector3.back * increment);
-            }
-            if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
-            {
+            if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
                 SetTransform(Vector3.forward * increment);
-            }
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
             GUILayout.Label("Left / Right:");
             GUILayout.FlexibleSpace();
             posXStr = (GUILayout.TextField(posXStr, 11, GUILayout.Width(fTempWidth)));
-            if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
-            {
+
+            if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
                 SetTransform(Vector3.left * increment);
-            }
-            if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
-            {
+            if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
                 SetTransform(Vector3.right * increment);
-            }
+
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
             GUILayout.Label("Down / Up:");
             GUILayout.FlexibleSpace();
             posYStr = (GUILayout.TextField(posYStr, 11, GUILayout.Width(fTempWidth)));
-            if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
-            {
+
+            if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
                 SetTransform(Vector3.down * increment);
-            }
-            if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
-            {
+            if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
                 SetTransform(Vector3.up * increment);
-            }
 
 
 
@@ -502,14 +493,12 @@ namespace KerbalKonstructs.UI
 
                 fTempWidth = 80f;
                 oriXStr = (GUILayout.TextField(oriXStr, 8, GUILayout.Width(fTempWidth)));
-                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
-                {
+
+                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
                     SetRotation(Vector3.right, increment);
-                }
-                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
-                {
+                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
                     SetRotation(Vector3.left, increment);
-                }
+
             }
             GUILayout.EndHorizontal();
 
@@ -519,14 +508,11 @@ namespace KerbalKonstructs.UI
                 GUILayout.Label("Roll:");
                 GUILayout.FlexibleSpace();
                 oriZStr = (GUILayout.TextField(oriZStr, 8, GUILayout.Width(fTempWidth)));
-                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
-                {
+
+                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(21)))
                     SetRotation(Vector3.forward, increment);
-                }
-                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) || GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
-                {
+                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(21)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(21)))
                     SetRotation(Vector3.back, increment);
-                }
 
             }
             GUILayout.EndHorizontal();
@@ -544,22 +530,10 @@ namespace KerbalKonstructs.UI
                 //GUILayout.Box(GetHeading(), GUILayout.Width(fTempWidth));
                 oriYStr = (GUILayout.TextField(oriYStr, 8, GUILayout.Width(fTempWidth)));
 
-                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(23)))
-                {
+                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(23)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(23)))
                     SetRotation(Vector3.up, -increment);
-                }
-                if (GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(23)))
-                {
-                    SetRotation(Vector3.up, -increment);
-                }
-                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(23)))
-                {
+                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(23)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(23)))
                     SetRotation(Vector3.up, increment);
-                }
-                if (GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(23)))
-                {
-                    SetRotation(Vector3.up, increment);
-                }
             }
             GUILayout.EndHorizontal();
 
@@ -585,22 +559,12 @@ namespace KerbalKonstructs.UI
                 GUILayout.FlexibleSpace();
                 selectedInstance.ModelScale = Math.Max(0.01f, float.Parse(GUILayout.TextField(selectedInstance.ModelScale.ToString(), 4, GUILayout.Width(fTempWidth))));
 
-                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(23)))
+                if (GUILayout.RepeatButton("<<", GUILayout.Width(30), GUILayout.Height(23)) | GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(23)))
                 {
                     selectedInstance.ModelScale = Math.Max(0.01f, selectedInstance.ModelScale - increment);
                     ApplySettings();
                 }
-                if (GUILayout.Button("<", GUILayout.Width(30), GUILayout.Height(23)))
-                {
-                    selectedInstance.ModelScale = Math.Max(0.01f, selectedInstance.ModelScale - increment);
-                    ApplySettings();
-                }
-                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(23)))
-                {
-                    selectedInstance.ModelScale += increment;
-                    ApplySettings();
-                }
-                if (GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(23)))
+                if (GUILayout.Button(">", GUILayout.Width(30), GUILayout.Height(23)) | GUILayout.RepeatButton(">>", GUILayout.Width(30), GUILayout.Height(23)))
                 {
                     selectedInstance.ModelScale += increment;
                     ApplySettings();
