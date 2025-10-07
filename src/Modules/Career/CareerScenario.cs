@@ -20,14 +20,6 @@ namespace KerbalKonstructs.Career
         /// <param name="node">The name of the config node</param>
         public override void OnLoad(ConfigNode node)
         {
-            // check if we have been in the mainmenue before (gameTime == -1) or if we saved just before we load (scene switch)
-            if (KerbalKonstructs.gameTime == -1d || KerbalKonstructs.gameTime > HighLogic.CurrentGame.UniversalTime)
-            {
-            }
-            else
-            {
-                return;
-            }
 
             CareerMapDecals.LoadDecals(node);
 
