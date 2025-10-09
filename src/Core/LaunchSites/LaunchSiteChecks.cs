@@ -348,23 +348,53 @@ namespace KerbalKonstructs.Core
                     }
                     else
                     {
-                        //if (vessel.situation == Vessel.Situations.SPLASHED || vessel.situation == Vessel.Situations.LANDED || vessel.situation == Vessel.Situations.PRELAUNCH )
-                        //                        {
-                        ////                            Log.Normal("Body: "+ FlightGlobals.Bodies[vessel.orbitSnapShot.ReferenceBodyIndex].name);
-                        CelestialBody body = FlightGlobals.Bodies[vessel.orbitSnapShot.ReferenceBodyIndex];
-                        Vector3 position = body.GetWorldSurfacePosition(vessel.latitude, vessel.longitude, vessel.altitude);
-                        float distance = Vector3.Distance(position, launchSite.staticInstance.gameObject.transform.position);
-                        //Log.Normal("Vessel with distance: " + distance);
-                        if (distance < maxDistance)
+                        if (vessel.orbitSnapShot.ReferenceBodyIndex == launchSite.body.flightGlobalsIndex)
                         {
-                            Log.Normal("Found Vessel at Launchsite with distance: " + distance);
-                            count++;
-                            name = vessel.vesselName;
-                            idx = vesselIndex;
-                            vType = vessel.vesselType;
-                            break;
+                            if (vessel.situation == Vessel.Situations.SPLASHED || vessel.situation == Vessel.Situations.LANDED || vessel.situation == Vessel.Situations.PRELAUNCH)
+                            {
+                                CelestialBody body = FlightGlobals.Bodies[vessel.orbitSnapShot.ReferenceBodyIndex];
+
+                                if (body == null)
+                                {
+                                    Log.Normal("Could not find body for vessel");
+                                    vesselIndex++;
+                                    continue;
+                                }
+
+                                if (body != launchSite.body)
+                                {
+                                    Log.Normal("Vessel is on different body than Launchsite");
+                                    vesselIndex++;
+                                    continue;
+                                }
+
+                                Vector3 position = body.GetWorldSurfacePosition(vessel.latitude, vessel.longitude, vessel.altitude);
+
+                                Vector2d tol = GetLatLonTolerance(launchSite.staticInstance.groupCenter.RefLatitude, launchSite.staticInstance.groupCenter.RefLongitude, maxDistance, body.Radius + launchSite.staticInstance.groupCenter.RadiusOffset);
+
+                                if (Math.Abs(vessel.latitude - launchSite.staticInstance.groupCenter.RefLatitude) > tol.y || Math.Abs(vessel.longitude - launchSite.staticInstance.groupCenter.RefLongitude) > tol.x)
+                                {
+                                    Log.Normal("Vessel is outside lat/lon tolerance");
+                                    Log.Debug($"Lat/Lon tolerance: {tol.y}, {tol.x}");
+                                    Log.Debug($"Vessel Lat/Lon: {vessel.latitude}, {vessel.longitude}");
+                                    Log.Debug($"Launchsite Lat/Lon: {launchSite.staticInstance.groupCenter.RefLatitude}, {launchSite.staticInstance.groupCenter.RefLongitude}");
+                                    vesselIndex++;
+                                    continue;
+                                }
+                                else
+                                {
+                                    Log.Normal("Found Vessel at Launchsite with:");
+                                    Log.Debug($"Lat/Lon tolerance: {tol.y}, {tol.x}");
+                                    Log.Debug($"Vessel Lat/Lon: {vessel.latitude}, {vessel.longitude}");
+                                    Log.Debug($"Launchsite Lat/Lon: {launchSite.staticInstance.groupCenter.RefLatitude}, {launchSite.staticInstance.groupCenter.RefLongitude}");
+                                    count++;
+                                    name = vessel.vesselName;
+                                    idx = vesselIndex;
+                                    vType = vessel.vesselType;
+                                    break;
+                                }
+                            }
                         }
-                        //}
                     }
                     vesselIndex++;
                 }
@@ -399,18 +429,30 @@ namespace KerbalKonstructs.Core
                     }
                     else
                     {
-                        //if (vessel.situation == Vessel.Situations.SPLASHED || vessel.situation == Vessel.Situations.LANDED || vessel.situation == Vessel.Situations.PRELAUNCH)
-                        //{                          
-                        CelestialBody body = FlightGlobals.Bodies[vessel.orbitSnapShot.ReferenceBodyIndex];
-                        Vector3 position = body.GetWorldSurfacePosition(vessel.latitude, vessel.longitude, vessel.altitude);
-                        float distance = Vector3.Distance(position, launchSite.staticInstance.transform.position);
-
-                        if (distance < maxDistance)
+                        if (vessel.situation == Vessel.Situations.SPLASHED || vessel.situation == Vessel.Situations.LANDED || vessel.situation == Vessel.Situations.PRELAUNCH)
                         {
-                            Log.Normal("Found Vessel at Launchsite with distance: " + distance);
-                            list.Add(vessel);
+                            CelestialBody body = FlightGlobals.Bodies[vessel.orbitSnapShot.ReferenceBodyIndex];
+
+                            Vector2d tol = GetLatLonTolerance(launchSite.staticInstance.groupCenter.RefLatitude, launchSite.staticInstance.groupCenter.RefLongitude, maxDistance, body.Radius);
+
+                            if (Math.Abs(vessel.latitude - launchSite.staticInstance.groupCenter.RefLatitude) > tol.y || Math.Abs(vessel.longitude - launchSite.staticInstance.groupCenter.RefLongitude) > tol.x)
+                            {
+                                Log.Normal("Vessel is outside lat/lon tolerance");
+                                Log.Debug($"Lat/Lon tolerance: {tol.y}, {tol.x}");
+                                Log.Debug($"Vessel Lat/Lon: {vessel.latitude}, {vessel.longitude}");
+                                Log.Debug($"Launchsite Lat/Lon: {launchSite.staticInstance.groupCenter.RefLatitude}, {launchSite.staticInstance.groupCenter.RefLongitude}");
+                                continue;
+                            }
+                            else
+                            {
+                                Log.Normal("Found Vessel at Launchsite with:");
+                                Log.Debug($"Lat/Lon tolerance: {tol.y}, {tol.x}");
+                                Log.Debug($"Vessel Lat/Lon: {vessel.latitude}, {vessel.longitude}");
+                                Log.Debug($"Launchsite Lat/Lon: {launchSite.staticInstance.groupCenter.RefLatitude}, {launchSite.staticInstance.groupCenter.RefLongitude}");
+
+                                list.Add(vessel);
+                            }
                         }
-                        //}
                     }
 
                 }
@@ -419,8 +461,37 @@ namespace KerbalKonstructs.Core
             return list;
         }
 
+        public static Vector2d GetLatLonTolerance(double lat, double lon, double squareSize, double bodySize)
+        {
+            Vector2d dest(double latRad, double lonRad, double bearingRad, double angDist)
+            {
+                Vector2d res = new Vector2d(0, 0);
 
+                // lon = x, lat = y
+                res.x = Math.Asin(Math.Sin(latRad) * Math.Cos(angDist) + Math.Cos(latRad) * Math.Sin(angDist) * Math.Cos(bearingRad));
+                res.y = lonRad + Math.Atan2(Math.Sin(bearingRad) * Math.Sin(angDist) * Math.Cos(latRad), Math.Cos(angDist) - Math.Sin(latRad) * Math.Sin(res.x));
+
+                res.y = (res.y + Math.PI) % (2 * Math.PI) - Math.PI;
+
+                return res;
+            }
+
+            double s = squareSize / 2d;
+
+            double latRads = lat * Math.PI / 180d;
+            double lonRads = lon * Math.PI / 180d;
+            double delta = s / bodySize;
+
+            Vector2d north = dest(latRads, lonRads, 0d, delta);
+            double deltaLat = Math.Abs(north.x - latRads) * 180d / Math.PI;
+
+            Vector2d east = dest(latRads, lonRads, Math.PI / 2d, delta);
+            double deltaLon = Math.Abs(east.y - lonRads) * 180d / Math.PI;
+
+            deltaLat = Math.Min(0.2, deltaLat);
+            deltaLon = Math.Min(0.2, deltaLon);
+
+            return new Vector2d(deltaLon, deltaLat);
+        }
     }
-
-
 }
