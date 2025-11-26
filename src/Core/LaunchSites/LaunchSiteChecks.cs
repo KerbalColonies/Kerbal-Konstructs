@@ -353,6 +353,8 @@ namespace KerbalKonstructs.Core
                             if (vessel.situation == Vessel.Situations.SPLASHED || vessel.situation == Vessel.Situations.LANDED || vessel.situation == Vessel.Situations.PRELAUNCH)
                             {
                                 CelestialBody body = FlightGlobals.Bodies[vessel.orbitSnapShot.ReferenceBodyIndex];
+                                Vector3 position = body.GetWorldSurfacePosition(vessel.latitude, vessel.longitude, vessel.altitude);
+                                float distance = Vector3.Distance(position, launchSite.staticInstance.gameObject.transform.position);
 
                                 if (body == null)
                                 {
@@ -368,25 +370,38 @@ namespace KerbalKonstructs.Core
                                     continue;
                                 }
 
-                                Vector3 position = body.GetWorldSurfacePosition(vessel.latitude, vessel.longitude, vessel.altitude);
-
-                                Vector2d tol = GetLatLonTolerance(launchSite.staticInstance.groupCenter.RefLatitude, launchSite.staticInstance.groupCenter.RefLongitude, maxDistance, body.Radius + launchSite.staticInstance.groupCenter.RadiusOffset);
-
-                                if (Math.Abs(vessel.latitude - launchSite.staticInstance.groupCenter.RefLatitude) > tol.y || Math.Abs(vessel.longitude - launchSite.staticInstance.groupCenter.RefLongitude) > tol.x)
+                                //Log.Normal("Vessel with distance: " + distance);
+                                if (distance == 0)
                                 {
-                                    Log.Normal("Vessel is outside lat/lon tolerance");
-                                    Log.Debug($"Lat/Lon tolerance: {tol.y}, {tol.x}");
-                                    Log.Debug($"Vessel Lat/Lon: {vessel.latitude}, {vessel.longitude}");
-                                    Log.Debug($"Launchsite Lat/Lon: {launchSite.staticInstance.groupCenter.RefLatitude}, {launchSite.staticInstance.groupCenter.RefLongitude}");
-                                    vesselIndex++;
-                                    continue;
+                                    Log.Normal("Vessel has same position as Launchsite, probably floating point error. Using gps checks instead.");
+
+                                    Vector2d tol = GetLatLonTolerance(launchSite.staticInstance.groupCenter.RefLatitude, launchSite.staticInstance.groupCenter.RefLongitude, maxDistance, body.Radius + launchSite.staticInstance.groupCenter.RadiusOffset);
+
+                                    if (Math.Abs(vessel.latitude - launchSite.staticInstance.groupCenter.RefLatitude) > tol.y || Math.Abs(vessel.longitude - launchSite.staticInstance.groupCenter.RefLongitude) > tol.x)
+                                    {
+                                        Log.Normal("Vessel is outside lat/lon tolerance");
+                                        Log.Debug($"Lat/Lon tolerance: {tol.y}, {tol.x}");
+                                        Log.Debug($"Vessel Lat/Lon: {vessel.latitude}, {vessel.longitude}");
+                                        Log.Debug($"Launchsite Lat/Lon: {launchSite.staticInstance.groupCenter.RefLatitude}, {launchSite.staticInstance.groupCenter.RefLongitude}");
+                                        vesselIndex++;
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        Log.Normal("Found Vessel at Launchsite with:");
+                                        Log.Debug($"Lat/Lon tolerance: {tol.y}, {tol.x}");
+                                        Log.Debug($"Vessel Lat/Lon: {vessel.latitude}, {vessel.longitude}");
+                                        Log.Debug($"Launchsite Lat/Lon: {launchSite.staticInstance.groupCenter.RefLatitude}, {launchSite.staticInstance.groupCenter.RefLongitude}");
+                                        count++;
+                                        name = vessel.vesselName;
+                                        idx = vesselIndex;
+                                        vType = vessel.vesselType;
+                                        break;
+                                    }
                                 }
-                                else
+                                else if (distance < maxDistance)
                                 {
-                                    Log.Normal("Found Vessel at Launchsite with:");
-                                    Log.Debug($"Lat/Lon tolerance: {tol.y}, {tol.x}");
-                                    Log.Debug($"Vessel Lat/Lon: {vessel.latitude}, {vessel.longitude}");
-                                    Log.Debug($"Launchsite Lat/Lon: {launchSite.staticInstance.groupCenter.RefLatitude}, {launchSite.staticInstance.groupCenter.RefLongitude}");
+                                    Log.Normal("Found Vessel at Launchsite with distance: " + distance);
                                     count++;
                                     name = vessel.vesselName;
                                     idx = vesselIndex;
@@ -433,25 +448,39 @@ namespace KerbalKonstructs.Core
                         {
                             CelestialBody body = FlightGlobals.Bodies[vessel.orbitSnapShot.ReferenceBodyIndex];
 
-                            Vector2d tol = GetLatLonTolerance(launchSite.staticInstance.groupCenter.RefLatitude, launchSite.staticInstance.groupCenter.RefLongitude, maxDistance, body.Radius);
+                            Vector3 position = body.GetWorldSurfacePosition(vessel.latitude, vessel.longitude, vessel.altitude);
+                            float distance = Vector3.Distance(position, launchSite.staticInstance.transform.position);
 
-                            if (Math.Abs(vessel.latitude - launchSite.staticInstance.groupCenter.RefLatitude) > tol.y || Math.Abs(vessel.longitude - launchSite.staticInstance.groupCenter.RefLongitude) > tol.x)
+                            if (distance == 0)
                             {
-                                Log.Normal("Vessel is outside lat/lon tolerance");
-                                Log.Debug($"Lat/Lon tolerance: {tol.y}, {tol.x}");
-                                Log.Debug($"Vessel Lat/Lon: {vessel.latitude}, {vessel.longitude}");
-                                Log.Debug($"Launchsite Lat/Lon: {launchSite.staticInstance.groupCenter.RefLatitude}, {launchSite.staticInstance.groupCenter.RefLongitude}");
-                                continue;
+                                Log.Normal("Vessel has same position as Launchsite, probably floating point error. Using gps checks instead.");
+                                Vector2d tol = GetLatLonTolerance(launchSite.staticInstance.groupCenter.RefLatitude, launchSite.staticInstance.groupCenter.RefLongitude, maxDistance, body.Radius);
+
+                                if (Math.Abs(vessel.latitude - launchSite.staticInstance.groupCenter.RefLatitude) > tol.y || Math.Abs(vessel.longitude - launchSite.staticInstance.groupCenter.RefLongitude) > tol.x)
+                                {
+                                    Log.Normal("Vessel is outside lat/lon tolerance");
+                                    Log.Debug($"Lat/Lon tolerance: {tol.y}, {tol.x}");
+                                    Log.Debug($"Vessel Lat/Lon: {vessel.latitude}, {vessel.longitude}");
+                                    Log.Debug($"Launchsite Lat/Lon: {launchSite.staticInstance.groupCenter.RefLatitude}, {launchSite.staticInstance.groupCenter.RefLongitude}");
+                                    continue;
+                                }
+                                else
+                                {
+                                    Log.Normal("Found Vessel at Launchsite with:");
+                                    Log.Debug($"Lat/Lon tolerance: {tol.y}, {tol.x}");
+                                    Log.Debug($"Vessel Lat/Lon: {vessel.latitude}, {vessel.longitude}");
+                                    Log.Debug($"Launchsite Lat/Lon: {launchSite.staticInstance.groupCenter.RefLatitude}, {launchSite.staticInstance.groupCenter.RefLongitude}");
+
+                                    list.Add(vessel);
+                                }
                             }
-                            else
+                            if (distance < maxDistance)
                             {
-                                Log.Normal("Found Vessel at Launchsite with:");
-                                Log.Debug($"Lat/Lon tolerance: {tol.y}, {tol.x}");
-                                Log.Debug($"Vessel Lat/Lon: {vessel.latitude}, {vessel.longitude}");
-                                Log.Debug($"Launchsite Lat/Lon: {launchSite.staticInstance.groupCenter.RefLatitude}, {launchSite.staticInstance.groupCenter.RefLongitude}");
-
+                                Log.Normal("Found Vessel at Launchsite with distance: " + distance);
                                 list.Add(vessel);
                             }
+
+
                         }
                     }
 
