@@ -120,7 +120,6 @@ namespace KerbalKonstructs.Core
                     retval = false;
                 }
 
-                //Log.Normal("Ship dimensions: " + shipSize.ToString() );
                 return retval;
             }
 
@@ -313,7 +312,6 @@ namespace KerbalKonstructs.Core
         /// <param name="vType"></param>
         public static void FindVesselsLandedAtKK(FlightState flightState, string landedAt, out int count, out string name, out int idx, out VesselType vType)
         {
-            // Log.Normal("Called");
             float maxDistance = 100f;
 
             int vesselIndex = 0;
@@ -399,7 +397,6 @@ namespace KerbalKonstructs.Core
                         return false;
                     }
 
-                    //Log.Normal("Vessel with distance: " + distance);
                     if (distance == 0)
                     {
                         Log.Normal("Vessel has same position as Launchsite, probably floating point error. Using gps checks instead.");
