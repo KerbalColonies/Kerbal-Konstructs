@@ -1270,6 +1270,8 @@ namespace KerbalKonstructs
 
             foreach (StaticInstance instance in StaticDatabase.GetInstancesFromModel(model))
             {
+                if (instance.isInSavegame) continue;
+
                 ConfigNode inst = new ConfigNode("Instances");
                 ConfigParser.WriteInstanceConfig(instance, inst);
                 modelConfig.nodes.Add(inst);
@@ -1343,6 +1345,8 @@ namespace KerbalKonstructs
 
         internal void SaveGroupCenters()
         {
+            StaticDatabase.allGroupCenters.Where(g => g.isInSavegame && !string.IsNullOrEmpty(g.configPath)).ToList().ForEach(g => deletedGroups.Add(g));
+
             foreach (GroupCenter center in deletedGroups)
             {
                 if (File.Exists(KSPUtil.ApplicationRootPath + "GameData/" + center.configPath))
